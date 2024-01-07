@@ -1,0 +1,17 @@
+week,type,tournament_name,file
+1,es,"Las Vegas Challenge",data/tournaments/1_las_vegas.csv
+2,es,"Waco",data/tournaments/2_waco.csv
+3,es,"The Open at Austin",data/tournaments/3_austin.csv
+4,es,"Music City Open",data/tournaments/4_music_city.csv
+5,m,"PDGA Champions Cup",data/tournaments/5_champions_cup.csv
+6,es,"Jonesboro Open",data/tournaments/6_jonesboro.csv
+7,es,"OTB Open",data/tournaments/7_otb.csv
+8,es,"Portland Open",data/tournaments/8_portland.csv
+9,es,"Dynamic Discs Open",data/tournaments/9_ddo.csv
+10,es,"Trubank Des Moines Challenge",data/tournaments/10_des_moines.csv
+11,es,"The Preserve Championship",data/tournaments/11_preserve.csv
+12,es,"PCS Open",data/tournaments/12_pcs.csv
+13,m,"European Open",data/tournaments/13_euro_open.csv
+14,es,"Discraft Ledgestone Open",data/tournaments/14_ledgestone.csv
+15,es,"LWS Open at Idlewild",data/tournaments/15_idlewild.csv
+16,es,"Discraft's Great Lakes Open",data/tournaments/16_dglo.csv
