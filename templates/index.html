@@ -11,22 +11,12 @@
             <th>Name</th>
             <th>Cash</th>
         </tr>
-        
+        {% for s in standings %}
           <tr>
-            <td>Marina</td>
-            <td>155892.0</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.cash }}</td>
           </tr>
-        
-          <tr>
-            <td>Luc</td>
-            <td>149726.0</td>
-          </tr>
-        
-          <tr>
-            <td>Wyatt</td>
-            <td>47363.0</td>
-          </tr>
-        
+        {% endfor %}
     </table>
 </div>
 </body>

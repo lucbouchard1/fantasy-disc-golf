@@ -10,15 +10,15 @@ def get_points(place):
     return 0
 
 def get_pdga_num_map():
-    pdgaDb = pd.read_csv('data/pdga_db.csv')
+    pdgaDb = pd.read_csv('data_2023/pdga_db.csv')
     return {row['name']: row['pdga#'] for _, row in pdgaDb.iterrows()}
 
 def get_tournament_data():
-    tournaments = pd.read_csv('data/tournaments.csv')
+    tournaments = pd.read_csv('data_2023/tournaments.csv')
 
     data = []
     for _, t in tournaments.iterrows():
-        d = pd.read_csv(t.file, header=None)
+        d = pd.read_csv('data_2023/' + t.file, header=None)
         d = pd.concat([d.iloc[:,0:6], d.iloc[:,-2:]], axis=1)
         d.columns=['place', 'points', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
         d['type'] = t.type
@@ -34,7 +34,7 @@ def get_tournament_data():
     return data
 
 def get_team_data(tournamentData, numWeeks):
-    teams = pd.read_csv('data/teams.csv')
+    teams = pd.read_csv('data_2023/teams.csv')
     pdgaMap = get_pdga_num_map()
 
     def name_to_pdga(name):
@@ -45,7 +45,7 @@ def get_team_data(tournamentData, numWeeks):
 
     data = []
     for _, t in teams.iterrows():
-        raw = pd.read_csv(t.file)
+        raw = pd.read_csv('data_2023/' + t.file)
         d = []
 
         for w in range(numWeeks):
