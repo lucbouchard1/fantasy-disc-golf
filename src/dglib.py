@@ -13,8 +13,11 @@ def get_pdga_num_map():
     pdgaDb = pd.read_csv('data_2023/pdga_db.csv')
     return {row['name']: row['pdga#'] for _, row in pdgaDb.iterrows()}
 
+def get_tournaments():
+    return pd.read_csv('data_2023/tournaments.csv')
+
 def get_tournament_data():
-    tournaments = pd.read_csv('data_2023/tournaments.csv')
+    tournaments = get_tournaments()
 
     data = []
     for _, t in tournaments.iterrows():

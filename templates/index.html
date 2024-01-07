@@ -4,19 +4,41 @@
     <title>FDG</title>
 </head>
 <body>
+<h1>Fantasy Disc Golf Standings (Week {{ currentWeek }}) </h1>
 <div class="standings">
-    <h1>Standings</h1>
     <table>
         <tr>
+            <th>Place</th>
             <th>Name</th>
             <th>Cash</th>
         </tr>
         {% for s in standings %}
           <tr>
+            <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
             <td>{{ s.cash }}</td>
           </tr>
         {% endfor %}
+    </table>
+</div>
+<div class="weekly_results">
+    <h2>Weekly Results</h2>
+    <table>
+        <tr>
+            <th>Week</th>
+            <th>Tournament</th>
+            {% for h in weeklyHeader %}
+                <th>{{ h }}</th>
+            {% endfor %}
+        </tr>
+            {% for w in weekly %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% for d in w %}
+                        <td>{{ d }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
     </table>
 </div>
 </body>
