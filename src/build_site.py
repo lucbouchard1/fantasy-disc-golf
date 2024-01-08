@@ -1,6 +1,15 @@
 from jinja2 import Environment, FileSystemLoader
 import dglib
 
+def build_player_totals(tournamentData, teamData):
+    seasonTotals = tournamentData[['name', 'cash']].groupby('name', as_index=False).sum()
+    seasonTotals = seasonTotals.sort_values('cash', ascending=False).iloc[0:50]
+
+    playerTotals = []
+    for _, p in seasonTotals.iterrows():
+        playerTotals.append({'name': p[0], 'cash': p[1]})
+
+    return playerTotals
 
 def build_weekly_results(tournamentData, teamData):
     df = teamData[teamData.status == 'start']
@@ -33,15 +42,17 @@ def build_template_variables():
     teamData = dglib.get_team_data(tournamentData, numWeeks)  # NOTE: If player didn't play they won't be included in this DF
 
     standings = build_standings(tournamentData, teamData)
+    playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
 
     return {
+        'currentYear': 2023,
         'currentWeek': numWeeks,
         'standings': standings,
         'weekly': weekly,
-        'weeklyHeader': weeklyHeader
+        'weeklyHeader': weeklyHeader,
+        'playerTotals': playerTotals
     }
-
 
 
 environment = Environment(loader=FileSystemLoader("templates/"))
