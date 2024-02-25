@@ -19,7 +19,7 @@ def build_weekly_results(tournamentData, teamData):
 
     weekly = []
     for i, w in weeklyDf.iterrows():
-        weekly.append([tournaments.iloc[i]['tournament_name']] + list(w))
+        weekly.append([tournaments.iloc[i-1]['tournament_name']] + list(w))
 
     return weekly, list(weeklyDf.columns)
 
@@ -37,7 +37,7 @@ def build_standings(tournamentData, teamData):
     return standings
 
 def build_template_variables():
-    numWeeks = 6
+    numWeeks = 1
     tournamentData = dglib.get_tournament_data()
     teamData = dglib.get_team_data(tournamentData, numWeeks)  # NOTE: If player didn't play they won't be included in this DF
 
@@ -46,7 +46,7 @@ def build_template_variables():
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
 
     return {
-        'currentYear': 2023,
+        'currentYear': 2024,
         'currentWeek': numWeeks,
         'standings': standings,
         'weekly': weekly,

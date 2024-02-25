@@ -19,7 +19,7 @@ def get_lineup_data(coaches, weeks):
   Prints values from a sample spreadsheet.
   """
   creds = None
-  data = []
+  data_frames = {}
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
   # time.
@@ -56,12 +56,23 @@ def get_lineup_data(coaches, weeks):
         print("No data found.")
         return
 
-      data += [values[i] for i in range(1, weeks+1)]
+      rows = []
+      for i in range(1, weeks+1):
+        rows.append(values[i] + ([] if len(values[i]) == len(values[0]) else [None]))
+
+      df = pd.DataFrame(rows, columns=values[0])
+
+      # Clean data
+      df['Week'] = df['Week'].astype(int)
+      for row in values[0][2:]:
+        df[row] = df[row].str.lower()
+        df[row] = df[row].str.strip()
+
+      data_frames[coach] = df
   except HttpError as err:
     print(err)
 
-  return pd.DataFrame(data, columns=['Event', 'Week', 'Start 1', 'Start 2', 'Start 3', 'Start 4', 'Start 5',
-                              'Start 6', 'Bench 1', 'Bench 2', 'Bench 3', 'Bench 4', 'Injury Reserve'])
+  return data_frames
 
 
 if __name__ == "__main__":

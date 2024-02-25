@@ -1,4 +1,5 @@
 import pandas as pd
+import drive_data
 
 def get_points(place):
     if place == 1:
@@ -10,18 +11,19 @@ def get_points(place):
     return 0
 
 def get_pdga_num_map():
-    pdgaDb = pd.read_csv('data_2023/pdga_db.csv')
+    pdgaDb = pd.read_csv('data/pdga_db.csv')
     return {row['name']: row['pdga#'] for _, row in pdgaDb.iterrows()}
 
-def get_tournaments():
-    return pd.read_csv('data_2023/tournaments.csv')
+def get_tournaments(year=2024):
+    return pd.read_csv('data/' + str(year) + '/tournaments.csv')
 
-def get_tournament_data():
+def get_tournament_data(year=2024):
+    folder = 'data/' + str(year) + '/'
     tournaments = get_tournaments()
 
     data = []
     for _, t in tournaments.iterrows():
-        d = pd.read_csv('data_2023/' + t.file, header=None)
+        d = pd.read_csv(folder + t.file, header=None)
         d = pd.concat([d.iloc[:,0:6], d.iloc[:,-2:]], axis=1)
         d.columns=['place', 'points', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
         d['type'] = t.type
@@ -37,38 +39,41 @@ def get_tournament_data():
     return data
 
 def get_team_data(tournamentData, numWeeks):
-    teams = pd.read_csv('data_2023/teams.csv')
+    lineups = drive_data.get_lineup_data(['Luc', 'Marina', 'Wyatt'], numWeeks)
     pdgaMap = get_pdga_num_map()
 
     def name_to_pdga(name):
+        name = name.lower()
+        name = name.strip()
         if name not in pdgaMap:
             print("Error:", name, "not found in PDGA number database")
             return None
         return pdgaMap[name]
 
     data = []
-    for _, t in teams.iterrows():
-        raw = pd.read_csv('data_2023/' + t.file)
+    for coach in lineups:
+        raw = lineups[coach]
         d = []
 
         for w in range(numWeeks):
             row = raw.iloc[w]
-            for p in range(5):
+            for p in range(6):
                 if isinstance(row['Start ' + str(p+1)], str):
-                    d.append((row.Week, name_to_pdga(row['Start ' + str(p+1)].lower()), 'start'))
+                    d.append((row.Week, name_to_pdga(row['Start ' + str(p+1)]), 'start'))
                 else:
                     d.append(None)
 
+            for p in range(4):
                 if isinstance(row['Bench ' + str(p+1)], str):
-                    d.append((row.Week, name_to_pdga(row['Bench ' + str(p+1)].lower()), 'bench'))
+                    d.append((row.Week, name_to_pdga(row['Bench ' + str(p+1)]), 'bench'))
                 else:
                     d.append(None)
-            if (pd.isnull(row['Injury Reserve'])):
-                d.append((row.Week, row['Injury Reserve'], 'injury'))
-            else:
-                d.append((row.Week, name_to_pdga(row['Injury Reserve'].lower()), 'injury'))
+
+            if (not pd.isnull(row['Injury Reserve'])):
+                d.append((row.Week, name_to_pdga(row['Injury Reserve']), 'injury'))
+
         d = pd.DataFrame(d, columns=['week', 'pdga#', 'status'])
-        d['coach'] = t['name']
+        d['coach'] = coach
         data.append(d)
 
     teamData = pd.concat(data)
