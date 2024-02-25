@@ -37,7 +37,7 @@ def build_standings(tournamentData, teamData):
     return standings
 
 def build_template_variables():
-    numWeeks = 1
+    numWeeks = len(dglib.get_tournaments())
     tournamentData = dglib.get_tournament_data()
     teamData = dglib.get_team_data(tournamentData, numWeeks)  # NOTE: If player didn't play they won't be included in this DF
 
