@@ -24,8 +24,8 @@ def get_tournament_data(year=2024):
     data = []
     for _, t in tournaments.iterrows():
         d = pd.read_csv(folder + t.file, header=None)
-        d = pd.concat([d.iloc[:,0:6], d.iloc[:,-2:]], axis=1)
-        d.columns=['place', 'points', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
+        d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
+        d.columns=['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
         d['type'] = t.type
         d['week'] = t.week
         d['tournament'] = t.tournament_name
