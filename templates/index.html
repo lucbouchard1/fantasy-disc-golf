@@ -18,7 +18,7 @@
           <tr>
             <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
-            <td>{{ "${:,.2f}".format(s.cash) }}</td>
+            <td>{{ "${:,.0f}".format(s.cash) }}</td>
           </tr>
         {% endfor %}
     </table>
@@ -38,7 +38,7 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ w[0] }}</td>
                     {% for d in w[1:] %}
-                        <td>{{ "${:,.2f}".format(d) }}</td>
+                        <td>{{ "${:,.0f}".format(d) }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -54,7 +54,7 @@
             {% for p in playerTotals %}
                 <tr>
                     <td>{{ p.name }}</td>
-                    <td>{{ "${:,.2f}".format(p.cash) }}</td>
+                    <td>{{ "${:,.0f}".format(p.cash) }}</td>
                 </tr>
             {% endfor %}
     </table>
