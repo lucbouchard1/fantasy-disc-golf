@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <title>FDG</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>{{ currentYear }} Fantasy Disc Golf (Week {{ currentWeek }}) </h1>
+<h2>{{ currentYear }} Fantasy Disc Golf</h1>
 <div class="standings">
-    <h2>Standings</h2>
+    <h3>Standings</h3>
     <table>
         <tr>
             <th>Place</th>
@@ -17,13 +18,13 @@
           <tr>
             <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
-            <td>{{ s.cash }}</td>
+            <td>{{ "${:,.2f}".format(s.cash) }}</td>
           </tr>
         {% endfor %}
     </table>
 </div>
 <div class="weekly_results">
-    <h2>Weekly Results</h2>
+    <h3>Weekly Results</h3>
     <table>
         <tr>
             <th>Week</th>
@@ -35,15 +36,16 @@
             {% for w in weekly %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    {% for d in w %}
-                        <td>{{ d }}</td>
+                    <td>{{ w[0] }}</td>
+                    {% for d in w[1:] %}
+                        <td>{{ "${:,.2f}".format(d) }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
     </table>
 </div>
 <div class="player_totals">
-    <h2>Player Totals</h2>
+    <h3>Player Totals</h3>
     <table>
         <tr>
             <th>Player</th>
@@ -52,7 +54,7 @@
             {% for p in playerTotals %}
                 <tr>
                     <td>{{ p.name }}</td>
-                    <td>{{ p.cash }}</td>
+                    <td>{{ "${:,.2f}".format(p.cash) }}</td>
                 </tr>
             {% endfor %}
     </table>
