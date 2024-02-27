@@ -689,6 +689,10 @@ h2 {
     text-align: center;
 }
 
+p {
+    margin: 1rem 0;
+}
+
 table {
     width: 100%;
 }
@@ -700,14 +704,8 @@ table {
     }
 }
 
-.lineups {
-    table {
-        width: 1500px;
-    }
-
-    p {
-        margin: 1rem 0;
-    }
+table.lineups {
+    width: 1500px;
 }
 
 .thick-line {
