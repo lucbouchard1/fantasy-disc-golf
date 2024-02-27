@@ -699,13 +699,11 @@ table {
 
 .overflow-table {
     overflow-x: scroll;
-    table {
-        margin: 0;
-    }
 }
 
 table.lineups {
     width: 1500px;
+    margin: 0;
 }
 
 .thick-line {
