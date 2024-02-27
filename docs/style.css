@@ -701,8 +701,8 @@ table {
 }
 
 .lineups {
-    th {
-        min-width: 170px;
+    table {
+        width: 1500px;
     }
 
     p {
