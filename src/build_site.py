@@ -1,5 +1,43 @@
 from jinja2 import Environment, FileSystemLoader
-import dglib
+import dglib, math
+
+def make_place_string(place):
+    if (math.isnan(place)):
+        return 'N/A'
+
+    place = int(place)
+    if place > 10 and place < 14:
+        return str(place) + 'th'
+    elif place % 10 == 1:
+        return str(place) + 'st'
+    elif place % 10 == 2:
+        return str(place) + 'nd'
+    elif place % 10 == 3:
+        return str(place) + 'rd'
+    return str(place) + 'th'
+
+def build_lineups(tournamentData, numWeeks):
+    tournaments = dglib.get_tournaments()
+    teamData = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
+
+    lineups = {
+        "Luc": [],
+        "Marina": [],
+        "Wyatt": []
+    }
+
+    for coach in lineups:
+        for w in range(1, numWeeks+1):
+            name = tournaments[tournaments.week == w].iloc[0]['tournament_name']
+            lineups[coach].append({
+                'tournament': name,
+                'starters': [(p['entered_name'].title(), make_place_string(p['place']), p['cash']) for _, p in
+                    teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'start')].sort_values(by='cash', ascending=False).iterrows()],
+                'bench': [(p['entered_name'].title(), make_place_string(p['place']), p['cash']) for _, p in
+                    teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'bench')].sort_values(by='cash', ascending=False).iterrows()],
+            })
+
+    return lineups
 
 def build_player_totals(tournamentData, teamData):
     seasonTotals = tournamentData[['name', 'cash']].groupby('name', as_index=False).sum()
@@ -39,8 +77,9 @@ def build_standings(tournamentData, teamData):
 def build_template_variables():
     numWeeks = len(dglib.get_tournaments())
     tournamentData = dglib.get_tournament_data()
-    teamData = dglib.get_team_data(tournamentData, numWeeks)  # NOTE: If player didn't play they won't be included in this DF
+    teamData = dglib.get_team_data(tournamentData, numWeeks)
 
+    lineups = build_lineups(tournamentData, numWeeks)
     standings = build_standings(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
@@ -51,7 +90,8 @@ def build_template_variables():
         'standings': standings,
         'weekly': weekly,
         'weeklyHeader': weeklyHeader,
-        'playerTotals': playerTotals
+        'playerTotals': playerTotals,
+        'lineups': lineups
     }
 
 

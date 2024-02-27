@@ -44,8 +44,45 @@
             {% endfor %}
     </table>
 </div>
+<div class="lineups">
+    <h3>Lineups</h3>
+    {% for coach in lineups %}
+        <h4>{{ coach }}</h4>
+        <div class="overflow-table">
+                <table>
+                    <tr>
+                        <th>Tournament</th>
+                        <th>Start 1</th>
+                        <th>Start 2</th>
+                        <th>Start 3</th>
+                        <th>Start 4</th>
+                        <th>Start 5</th>
+                        <th>Start 6</th>
+                        <th>Bench 1</th>
+                        <th>Bench 2</th>
+                        <th>Bench 3</th>
+                        <th>Bench 4</th>
+                    </tr>
+                        {% for l in lineups[coach] %}
+                            <tr>
+                                <td>{{ l.tournament }}</td>
+
+                                {% for p in l.starters %}
+                                    <td><p>{{ p[0] }}</p><p>{{ "${:,.0f}".format(p[2]) }} ({{ p[1] }})</p></td>
+                                {% endfor %}
+
+                                {% for p in l.bench %}
+                                    <td><p>{{ p[0] }}</p><p>{{ "${:,.0f}".format(p[2]) }} ({{ p[1] }})</p></td>
+                                {% endfor %}
+
+                            </tr>
+                        {% endfor %}
+                </table>
+        </div>
+    {% endfor %}
+</div>
 <div class="player_totals">
-    <h3>Player Totals</h3>
+    <h3>Player Season Totals</h3>
     <table>
         <tr>
             <th>Player</th>
