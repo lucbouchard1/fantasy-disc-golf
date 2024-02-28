@@ -45,7 +45,7 @@ def build_player_totals(tournamentData, teamData):
 
     playerTotals = []
     for _, p in seasonTotals.iterrows():
-        playerTotals.append({'name': p[0], 'cash': p[1]})
+        playerTotals.append({'name': p['name'], 'cash': p['cash']})
 
     return playerTotals
 
