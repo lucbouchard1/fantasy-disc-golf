@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+import requests
 import pandas as pd
 import os.path
 
@@ -13,6 +15,34 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = "1IMPV2U6AUae9Xu4zpdAO2h2Mflaco1RHETVLUQXuRrQ"
 
+
+def download_tournament_data(url, csv_file):
+  r = requests.get(url)
+  content = r.text
+
+  soup = BeautifulSoup(content, 'html.parser')
+  table = soup.find(id="tournament-stats-0")
+
+  result = []
+  for row in table.tbody.contents:
+      if (row.name != "tr"):
+          continue
+
+      result_row = []
+      for col in row.contents:
+          if (col.name != "td" or 'round-rating' in col['class'] or len(col.contents) == 0):
+              continue
+
+          data = col.contents[0]
+          if (data.name is None):
+              result_row.append(str(data))
+          elif (data.name == 'a'):
+              result_row.append(str(data.contents[0]))
+
+      result.append(result_row)
+
+  df = pd.DataFrame(result)
+  df.to_csv(csv_file, header=False, index=False)
 
 def get_lineup_data(coaches, weeks):
   """Shows basic usage of the Sheets API.
@@ -155,3 +185,10 @@ def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
     result = pd.merge(teamData, tournamentData, on=['week', 'pdga#'], how=('left' if include_nonplaying else 'inner'))
     result['cash'].fillna(0, inplace=True)
     return result
+
+if __name__ == "__main__":
+  print("Downloading all tournament data...")
+  tournaments = get_tournaments()
+
+  for _, t in tournaments.iterrows():
+    download_tournament_data(t['url'], 'data/2024/' + t['file'])

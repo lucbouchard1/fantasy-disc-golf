@@ -1,2 +1,2 @@
-week,type,tournament_name,file
-1,es,"Chess.com Invitational",tournaments/1_chess_invite.csv
+week,type,tournament_name,url,file
+1,es,"Chess.com Invitational",https://www.pdga.com/tour/event/77775,tournaments/1_chess_invite.csv
