@@ -1,2 +1,3 @@
 week,type,tournament_name,url,file
 1,es,"Chess.com Invitational",https://www.pdga.com/tour/event/77775,tournaments/1_chess_invite.csv
+2,es,"Waco",https://www.pdga.com/tour/event/77758,tournaments/2_waco.csv

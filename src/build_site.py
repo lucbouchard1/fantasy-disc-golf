@@ -1,5 +1,13 @@
 from jinja2 import Environment, FileSystemLoader
+import matplotlib.pyplot as plt
 import dglib, math
+
+def make_weekly_plot(teamData, filename):
+    df = teamData[teamData.status == 'start']
+    weekly = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
+    weekly = weekly.pivot(index="week", columns="coach", values="cash")
+    weekly.cumsum().plot(title="Weekly Cash Totals", ylabel="Total Cash ($)", xlabel="Week", style='--x')
+    plt.savefig('docs/' + filename)
 
 def make_place_string(place):
     if (math.isnan(place)):
@@ -83,6 +91,7 @@ def build_template_variables():
     standings = build_standings(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
+    make_weekly_plot(teamData, 'weekly.png')
 
     return {
         'currentYear': 2024,
