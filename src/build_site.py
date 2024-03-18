@@ -6,7 +6,8 @@ def make_weekly_plot(teamData, filename):
     df = teamData[teamData.status == 'start']
     weekly = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
     weekly = weekly.pivot(index="week", columns="coach", values="cash")
-    weekly.cumsum().plot(title="Weekly Cash Totals", ylabel="Total Cash ($)", xlabel="Week", style='--x')
+    ax = weekly.cumsum().plot(title="Weekly Cash Totals", ylabel="Total Cash ($)", xlabel="Week", style='--x')
+    ax.set_ylim(bottom=0)
     plt.savefig('docs/' + filename)
 
 def make_place_string(place):
