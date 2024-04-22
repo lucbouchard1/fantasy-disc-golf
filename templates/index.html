@@ -88,11 +88,13 @@
         <tr>
             <th>Player</th>
             <th>Total Cash</th>
+            <th>Average Cash</th>
         </tr>
             {% for p in playerTotals %}
                 <tr>
                     <td>{{ p.name }}</td>
                     <td>{{ "${:,.0f}".format(p.cash) }}</td>
+                    <td>{{ "${:,.0f}".format(p.avg) }}</td>
                 </tr>
             {% endfor %}
     </table>

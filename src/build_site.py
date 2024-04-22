@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 import matplotlib.pyplot as plt
+import numpy as np
 import dglib, math
 
 def make_weekly_plot(teamData, filename):
@@ -49,12 +50,15 @@ def build_lineups(tournamentData, numWeeks):
     return lineups
 
 def build_player_totals(tournamentData, teamData):
-    seasonTotals = tournamentData[['name', 'cash']].groupby('name', as_index=False).sum()
+    seasonTotals = tournamentData[['name', 'cash']].groupby('name', as_index=False).agg(
+        cash=('cash', np.sum),
+        avg=('cash', np.mean)
+    )
     seasonTotals = seasonTotals.sort_values('cash', ascending=False).iloc[0:50]
 
     playerTotals = []
     for _, p in seasonTotals.iterrows():
-        playerTotals.append({'name': p['name'], 'cash': p['cash']})
+        playerTotals.append({'name': p['name'], 'cash': p['cash'], 'avg': p['avg']})
 
     return playerTotals
 
