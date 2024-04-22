@@ -30,7 +30,10 @@ def download_tournament_data(url, csv_file):
 
       result_row = []
       for col in row.contents:
-          if (col.name != "td" or 'round-rating' in col['class'] or len(col.contents) == 0):
+          if (col.name != "td" or \
+                'round-rating' in col['class'] or \
+                'points' in col['class'] or \
+                len(col.contents) == 0):
               continue
 
           data = col.contents[0]
