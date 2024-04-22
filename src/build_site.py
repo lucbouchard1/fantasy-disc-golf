@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import dglib, math
 
-def make_weekly_plot(teamData, filename):
-    df = teamData[teamData.status == 'start']
+def make_weekly_plot(teamData, filename, status='start', title="Weekly Cash Totals"):
+    df = teamData[teamData.status == status]
     weekly = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
     weekly = weekly.pivot(index="week", columns="coach", values="cash")
-    ax = weekly.cumsum().plot(title="Weekly Cash Totals", ylabel="Total Cash ($)", xlabel="Week", style='--x')
+    ax = weekly.cumsum().plot(title=title, ylabel="Total Cash ($)", xlabel="Week", style='--x')
     ax.set_ylim(bottom=0)
     plt.savefig('docs/' + filename)
 
@@ -62,8 +62,8 @@ def build_player_totals(tournamentData, teamData):
 
     return playerTotals
 
-def build_weekly_results(tournamentData, teamData):
-    df = teamData[teamData.status == 'start']
+def build_weekly_results(tournamentData, teamData, status='start'):
+    df = teamData[teamData.status == status]
     tournaments = dglib.get_tournaments()
     weeklyDf = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
     weeklyDf = weeklyDf.pivot(index="week", columns="coach", values="cash")
@@ -96,7 +96,9 @@ def build_template_variables():
     standings = build_standings(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
+    bench, benchHeader = build_weekly_results(tournamentData, teamData, status='bench')
     make_weekly_plot(teamData, 'weekly.png')
+    make_weekly_plot(teamData, 'bench.png', status='bench', title="Bench Cash Totals")
 
     return {
         'currentYear': 2024,
@@ -104,6 +106,8 @@ def build_template_variables():
         'standings': standings,
         'weekly': weekly,
         'weeklyHeader': weeklyHeader,
+        'bench': bench,
+        'benchHeader': benchHeader,
         'playerTotals': playerTotals,
         'lineups': lineups
     }

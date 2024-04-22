@@ -82,6 +82,28 @@
         </div>
     {% endfor %}
 </div>
+<div class="weekly_results">
+    <h3>Bench Cash</h3>
+    <table>
+        <tr>
+            <th>Week</th>
+            <th>Tournament</th>
+            {% for h in benchHeader %}
+                <th>{{ h }}</th>
+            {% endfor %}
+        </tr>
+            {% for w in bench %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ w[0] }}</td>
+                    {% for d in w[1:] %}
+                        <td>{{ "${:,.0f}".format(d) }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+    </table>
+    <img src="bench.png", alt="bench result plot">
+</div>
 <div class="player_totals">
     <h3>Player Season Totals</h3>
     <table>
