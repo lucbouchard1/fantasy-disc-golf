@@ -22,9 +22,7 @@
           </tr>
         {% endfor %}
     </table>
-</div>
-<div class="weekly_results">
-    <h3>Weekly Results</h3>
+    <h4>Weekly Results</h4>
     <table>
         <tr>
             <th>Week</th>
@@ -50,7 +48,20 @@
     {% for coach in lineups %}
         <h4>{{ coach }}</h4>
         <div class="overflow-table">
-                <table class="lineups">
+                <table class="lineups" style="width:1800px;">
+                    <colgroup>
+                        <col style="width: 100px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                        <col style="width: 170px;">
+                     </colgroup>
                     <tr>
                         <th>Tournament</th>
                         <th>Start 1</th>
@@ -84,6 +95,21 @@
 </div>
 <div class="weekly_results">
     <h3>Bench Cash</h3>
+    <table>
+        <tr>
+            <th>Place</th>
+            <th>Name</th>
+            <th>Cash</th>
+        </tr>
+        {% for s in benchTotals %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ "${:,.0f}".format(s.cash) }}</td>
+          </tr>
+        {% endfor %}
+    </table>
+    <h4>Weekly Bench Cash</h4>
     <table>
         <tr>
             <th>Week</th>

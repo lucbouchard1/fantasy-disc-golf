@@ -74,8 +74,8 @@ def build_weekly_results(tournamentData, teamData, status='start'):
 
     return weekly, list(weeklyDf.columns)
 
-def build_standings(tournamentData, teamData):
-    df = teamData[teamData.status == 'start']
+def build_standings(tournamentData, teamData, status='start'):
+    df = teamData[teamData.status == status]
     weekly = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
     weekly = weekly.pivot(index="week", columns="coach", values="cash")
     totals = weekly.sum().sort_values(ascending=False)
@@ -97,6 +97,7 @@ def build_template_variables():
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
     bench, benchHeader = build_weekly_results(tournamentData, teamData, status='bench')
+    benchTotals = build_standings(tournamentData, teamData, status='bench')
     make_weekly_plot(teamData, 'weekly.png')
     make_weekly_plot(teamData, 'bench.png', status='bench', title="Bench Cash Totals")
 
@@ -108,6 +109,7 @@ def build_template_variables():
         'weeklyHeader': weeklyHeader,
         'bench': bench,
         'benchHeader': benchHeader,
+        'benchTotals': benchTotals,
         'playerTotals': playerTotals,
         'lineups': lineups
     }

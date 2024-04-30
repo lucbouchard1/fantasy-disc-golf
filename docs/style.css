@@ -693,6 +693,10 @@ p {
     margin: 1rem 0;
 }
 
+td > p {
+  margin: 0.25rem 0;
+}
+
 table {
     width: 100%;
 }
@@ -702,7 +706,6 @@ table {
 }
 
 table.lineups {
-    width: 1500px;
     margin: 0;
 }
 
