@@ -90,7 +90,7 @@ def build_standings(tournamentData, teamData, status='start'):
 def build_template_variables():
     numWeeks = len(dglib.get_tournaments())
     tournamentData = dglib.get_tournament_data()
-    teamData = dglib.get_team_data(tournamentData, numWeeks)
+    teamData = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
 
     lineups = build_lineups(tournamentData, numWeeks)
     standings = build_standings(tournamentData, teamData)
