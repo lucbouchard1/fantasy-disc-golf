@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import os.path
+import sys
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -13,12 +14,14 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # The ID and range of a sample spreadsheet.
-SAMPLE_SPREADSHEET_ID = "1IMPV2U6AUae9Xu4zpdAO2h2Mflaco1RHETVLUQXuRrQ"
+SAMPLE_SPREADSHEET_ID = "1mFoRynABSL416epHZq7LQ12L6CHh6VixLPOQJrTW81M"
 
 
 def download_tournament_data(url, csv_file):
   r = requests.get(url)
   content = r.text
+
+  print("Downloading", url, "to", csv_file)
 
   soup = BeautifulSoup(content, 'html.parser')
   table = soup.find(id="tournament-stats-0")
@@ -125,7 +128,7 @@ def get_tournaments(year=2024):
 
 def get_tournament_data(year=2024):
     folder = 'data/' + str(year) + '/'
-    tournaments = get_tournaments()
+    tournaments = get_tournaments(year=year)
 
     data = []
     for _, t in tournaments.iterrows():
@@ -145,7 +148,7 @@ def get_tournament_data(year=2024):
     return data
 
 def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
-    lineups = get_lineup_data(['Luc', 'Marina', 'Wyatt'], numWeeks)
+    lineups = get_lineup_data(['Luc', 'Marina', 'Wyatt', 'Max'], numWeeks)
     pdgaMap = get_pdga_num_map()
 
     def name_to_pdga(name):
@@ -163,14 +166,14 @@ def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
 
         for w in range(numWeeks):
             row = raw.iloc[w]
-            for p in range(6):
+            for p in range(4):
                 curr = row['Start ' + str(p+1)]
                 if isinstance(curr, str):
                     d.append((row.Week, curr, name_to_pdga(curr), 'start'))
                 else:
                     d.append(None)
 
-            for p in range(4):
+            for p in range(3):
                 curr = row['Bench ' + str(p+1)]
                 if isinstance(curr, str):
                     d.append((row.Week, curr, name_to_pdga(curr), 'bench'))
@@ -190,8 +193,13 @@ def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
     return result
 
 if __name__ == "__main__":
+  if len(sys.argv) != 2:
+     print("Include year as argument.")
+     exit(-1)
+  year = int(sys.argv[1])
+
   print("Downloading all tournament data...")
-  tournaments = get_tournaments()
+  tournaments = get_tournaments(year=year)
 
   for _, t in tournaments.iterrows():
-    download_tournament_data(t['url'], 'data/2024/' + t['file'])
+    download_tournament_data(t['url'], 'data/' + str(year) + '/' + t['file'])

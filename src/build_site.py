@@ -27,13 +27,14 @@ def make_place_string(place):
     return str(place) + 'th'
 
 def build_lineups(tournamentData, numWeeks):
-    tournaments = dglib.get_tournaments()
+    tournaments = dglib.get_tournaments(year=2025)
     teamData = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
 
     lineups = {
         "Luc": [],
         "Marina": [],
-        "Wyatt": []
+        "Wyatt": [],
+        "Max": []
     }
 
     for coach in lineups:
@@ -64,7 +65,7 @@ def build_player_totals(tournamentData, teamData):
 
 def build_weekly_results(tournamentData, teamData, status='start'):
     df = teamData[teamData.status == status]
-    tournaments = dglib.get_tournaments()
+    tournaments = dglib.get_tournaments(year=2025)
     weeklyDf = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
     weeklyDf = weeklyDf.pivot(index="week", columns="coach", values="cash")
 
@@ -87,9 +88,9 @@ def build_standings(tournamentData, teamData, status='start'):
         )
     return standings
 
-def build_template_variables():
-    numWeeks = len(dglib.get_tournaments())
-    tournamentData = dglib.get_tournament_data()
+def build_template_variables(year=2025):
+    numWeeks = len(dglib.get_tournaments(year=year))
+    tournamentData = dglib.get_tournament_data(year=year)
     teamData = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
 
     lineups = build_lineups(tournamentData, numWeeks)
@@ -102,7 +103,7 @@ def build_template_variables():
     make_weekly_plot(teamData, 'bench.png', status='bench', title="Bench Cash Totals")
 
     return {
-        'currentYear': 2024,
+        'currentYear': 2025,
         'currentWeek': numWeeks,
         'standings': standings,
         'weekly': weekly,

@@ -10,6 +10,6 @@ python src/build_site.py
 
 ## Download Tournamanet Data
 
-1) Update `data/2024/tournaments.csv`
+1) Update `data/<year>/tournaments.csv`
 
-2) Run `python src/dglib.py`
+2) Run `python src/dglib.py <year>`
