@@ -163,10 +163,16 @@ def build_template_variables(year=2025):
 
 environment = Environment(loader=FileSystemLoader("templates/"))
 template = environment.get_template("index.html")
+live = environment.get_template("live.html")
 variables = build_template_variables()
 
 content = template.render(**variables)
+liveContent = live.render(**variables)
 
 with open('docs/index.html', mode="w", encoding="utf-8") as site:
     site.write(content)
-    print("Built site.")
+
+with open('docs/live.html', mode="w", encoding="utf-8") as site:
+    site.write(liveContent)
+
+print("Built site.")

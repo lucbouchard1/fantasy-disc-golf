@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FDG Live</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="live.js"></script>
+<body>
+<h2><i>{{ tournaments[liveWeek-1] }}</i> Live Score Calculator</h2>
+<a href="index.html"><h4>{{ currentYear }} FDG Standings</h4></a>
+<div class="live_scores">
+    <h4>Matchup 1</h4>
+    <table>
+        <tr>
+            <th>{{ matchup1[0] }} Players</th>
+            <th>Place</th>
+            <th>Points</th>
+            <th>{{ matchup1[1] }} Players</th>
+            <th>Place</th>
+            <th>Points</th>
+        </tr>
+            {% for i in range(4) %}
+                <tr>
+                    <td>{{ liveScores[matchup1[0]][i] }}</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="{{ matchup1[0] }}-input"
+                            onchange="sumInputs('{{ matchup1[0] }}');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="{{ matchup1[0] }}-points">0</td>
+                    <td>{{ liveScores[matchup1[1]][i] }}</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="{{ matchup1[1] }}-input"
+                            onchange="sumInputs('{{ matchup1[1] }}');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="{{ matchup1[1] }}-points">0</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td id="{{ matchup1[0] }}-total"/>0</td>
+                <td></td>
+                <td>Total</td>
+                <td id="{{ matchup1[1] }}-total"/>0</td>
+            </tr>
+    </table>
+</div>
+</body>
+</html>
