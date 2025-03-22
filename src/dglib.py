@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import os.path
 import sys
+import scores
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -110,15 +111,6 @@ def get_lineup_data(coaches, weeks):
 
   return data_frames
 
-def get_points(place):
-    if place == 1:
-        return 8
-    elif place < 6:
-        return 3
-    elif place < 11:
-        return 1
-    return 0
-
 def get_pdga_num_map():
     pdgaDb = pd.read_csv('data/pdga_db.csv')
     return {row['name']: row['pdga#'] for _, row in pdgaDb.iterrows()}
@@ -142,8 +134,7 @@ def get_tournament_data(year=2024):
 
     data = pd.concat(data)
 
-    data['rawPoints'] = data['place'].apply(get_points)
-    data['fantasyPoints'] = data['rawPoints'] * (1 + (data['type'] == 'm'))
+    data['points'] = data['place'].apply(scores.get_points)
     data['cash'] = data['prize'].str[1:].str.replace(',', '').astype(float).fillna(0)
     return data
 
@@ -189,7 +180,7 @@ def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
 
     teamData = pd.concat(data)
     result = pd.merge(teamData, tournamentData, on=['week', 'pdga#'], how=('left' if include_nonplaying else 'inner'))
-    result['cash'].fillna(0, inplace=True)
+    result['cash'] = result['cash'].fillna(0)
     return result
 
 if __name__ == "__main__":

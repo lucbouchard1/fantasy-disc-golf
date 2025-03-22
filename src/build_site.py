@@ -42,9 +42,9 @@ def build_lineups(tournamentData, numWeeks):
             name = tournaments[tournaments.week == w].iloc[0]['tournament_name']
             lineups[coach].append({
                 'tournament': name,
-                'starters': [(p['entered_name'].title(), make_place_string(p['place']), p['cash']) for _, p in
+                'starters': [(p['entered_name'].title(), make_place_string(p['place']), p['points']) for _, p in
                     teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'start')].sort_values(by='cash', ascending=False).iterrows()],
-                'bench': [(p['entered_name'].title(), make_place_string(p['place']), p['cash']) for _, p in
+                'bench': [(p['entered_name'].title(), make_place_string(p['place']), p['points']) for _, p in
                     teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'bench')].sort_values(by='cash', ascending=False).iterrows()],
             })
 
@@ -52,8 +52,8 @@ def build_lineups(tournamentData, numWeeks):
 
 def build_player_totals(tournamentData, teamData):
     seasonTotals = tournamentData[['name', 'cash']].groupby('name', as_index=False).agg(
-        cash=('cash', np.sum),
-        avg=('cash', np.mean)
+        cash=('cash', 'sum'),
+        avg=('cash', 'mean')
     )
     seasonTotals = seasonTotals.sort_values('cash', ascending=False).iloc[0:50]
 
@@ -66,8 +66,8 @@ def build_player_totals(tournamentData, teamData):
 def build_weekly_results(tournamentData, teamData, status='start'):
     df = teamData[teamData.status == status]
     tournaments = dglib.get_tournaments(year=2025)
-    weeklyDf = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
-    weeklyDf = weeklyDf.pivot(index="week", columns="coach", values="cash")
+    weeklyDf = df[['week', 'coach', 'points']].groupby(by=['week', 'coach'], as_index=False).sum()
+    weeklyDf = weeklyDf.pivot(index="week", columns="coach", values="points")
 
     weekly = []
     for i, w in weeklyDf.iterrows():
@@ -77,14 +77,14 @@ def build_weekly_results(tournamentData, teamData, status='start'):
 
 def build_standings(tournamentData, teamData, status='start'):
     df = teamData[teamData.status == status]
-    weekly = df[['week', 'coach', 'cash']].groupby(by=['week', 'coach'], as_index=False).sum()
-    weekly = weekly.pivot(index="week", columns="coach", values="cash")
+    weekly = df[['week', 'coach', 'points']].groupby(by=['week', 'coach'], as_index=False).sum()
+    weekly = weekly.pivot(index="week", columns="coach", values="points")
     totals = weekly.sum().sort_values(ascending=False)
 
     standings = []
     for t in totals.items():
         standings.append(
-            {'name': t[0], 'cash': t[1]}
+            {'name': t[0], 'points': t[1]}
         )
     return standings
 

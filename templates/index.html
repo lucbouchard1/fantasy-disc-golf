@@ -12,13 +12,13 @@
         <tr>
             <th>Place</th>
             <th>Name</th>
-            <th>Cash</th>
+            <th>Points</th>
         </tr>
         {% for s in standings %}
           <tr>
             <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
-            <td>{{ "${:,.0f}".format(s.cash) }}</td>
+            <td>{{ s.points|int }}</td>
           </tr>
         {% endfor %}
     </table>
@@ -36,12 +36,11 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ w[0] }}</td>
                     {% for d in w[1:] %}
-                        <td>{{ "${:,.0f}".format(d) }}</td>
+                        <td>{{ d|int }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
     </table>
-    <img src="weekly.png", alt="weekly result plot">
 </div>
 <div class="lineups">
     <h3>Lineups</h3>
@@ -77,11 +76,11 @@
                                 <td>{{ l.tournament }}</td>
 
                                 {% for p in l.starters %}
-                                    <td><p>{{ p[0] }}</p><p>{{ "${:,.0f}".format(p[2]) }} ({{ p[1] }})</p></td>
+                                    <td><p>{{ p[0] }}</p><p>{{ p[2]|int }} ({{ p[1] }})</p></td>
                                 {% endfor %}
 
                                 {% for p in l.bench %}
-                                    <td><p>{{ p[0] }}</p><p>{{ "${:,.0f}".format(p[2]) }} ({{ p[1] }})</p></td>
+                                    <td><p>{{ p[0] }}</p><p>{{ p[2]|int }} ({{ p[1] }})</p></td>
                                 {% endfor %}
 
                             </tr>
@@ -91,7 +90,7 @@
     {% endfor %}
 </div>
 <div class="weekly_results">
-    <h3>Bench Cash</h3>
+    <h3>Bench Points</h3>
     <table>
         <tr>
             <th>Place</th>
@@ -102,11 +101,11 @@
           <tr>
             <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
-            <td>{{ "${:,.0f}".format(s.cash) }}</td>
+            <td>{{ s.points|int }}</td>
           </tr>
         {% endfor %}
     </table>
-    <h4>Weekly Bench Cash</h4>
+    <h4>Weekly Bench Points</h4>
     <table>
         <tr>
             <th>Week</th>
@@ -120,11 +119,12 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ w[0] }}</td>
                     {% for d in w[1:] %}
-                        <td>{{ "${:,.0f}".format(d) }}</td>
+                        <td>{{ d|int }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
     </table>
+    <img src="weekly.png", alt="weekly result plot">
     <img src="bench.png", alt="bench result plot">
 </div>
 <div class="player_totals">
