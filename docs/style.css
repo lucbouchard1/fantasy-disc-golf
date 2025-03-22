@@ -202,6 +202,10 @@ input[type="number"] {
   width: 75px;
 }
 
+.win {
+  font-weight: bold;
+}
+
 /* Set the cursor to '?' on an abbreviation and style the abbreviation to show that there is more information underneath */
 abbr[title] {
   cursor: help;
@@ -390,6 +394,7 @@ th {
 th {
   background-color: var(--accent-bg);
   font-weight: bold;
+  font-size: 1.2rem;
 }
 
 tr:nth-child(odd) {

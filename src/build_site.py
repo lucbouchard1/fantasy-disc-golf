@@ -82,6 +82,27 @@ def build_weekly_results(tournamentData, teamData, status='start'):
 
     return weekly, list(weeklyDf.columns)
 
+def build_weekly_win_results(tournamentData, teamData):
+    df = teamData[teamData.status == 'start']
+    weekly = df[['week', 'coach', 'opponent', 'points']].groupby(by=['week', 'coach'], as_index=False).agg({
+        'points': 'sum',
+        'opponent': 'first'
+    })
+    opps = weekly[['week', 'opponent']]
+    r = opps.merge(weekly[['week', 'coach', 'points']],
+            left_on=['week', 'opponent'],
+            right_on=['week', 'coach']
+        )
+    weekly['opponent_points'] = r['points']
+    weekly['win'] = weekly['opponent_points'] < weekly['points']
+    weeklyDf = weekly.pivot(index="week", columns="coach", values="win")
+
+    weekly = []
+    for i, w in weeklyDf.iterrows():
+        weekly.append(list(w))
+
+    return weekly
+
 def build_point_totals(tournamentData, teamData, status='start'):
     df = teamData[teamData.status == status]
     weekly = df[['week', 'coach', 'points']].groupby(by=['week', 'coach'], as_index=False).sum()
@@ -131,6 +152,7 @@ def build_template_variables(year=2025):
     lineups = build_lineups(tournamentData, numWeeks, coaches)
     liveWeek = numWeeks+1 if numWeeks+1 < len(schedule) else len(schedule)
     liveScores = build_live_score_lineups(tournamentData, liveWeek, coaches)
+    weeklyWins = build_weekly_win_results(tournamentData, teamData)
 
     pointTotals = build_point_totals(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
@@ -146,6 +168,7 @@ def build_template_variables(year=2025):
         'standings': standings,
         'pointTotals': pointTotals,
         'weekly': weekly,
+        'weeklyWins': weeklyWins,
         'weeklyHeader': weeklyHeader,
         'bench': bench,
         'benchHeader': benchHeader,
