@@ -3,7 +3,7 @@
 <head>
     <title>FDG</title>
     <link rel="stylesheet" href="style.css">
-</head>
+    <script src="live.js"></script>
 <body>
 <h2>2025 Fantasy Disc Golf</h1>
 <div class="standings">
@@ -242,11 +242,11 @@
                                 
                                     <td><p>Paul Mcbeth</p><p>12 (11th)</p></td>
                                 
-                                    <td><p>Chris Dickerson</p><p>6 (30th)</p></td>
+                                    <td><p>Ricky Wysocki</p><p>6 (38th)</p></td>
                                 
                                     <td><p>Isaac Robinson</p><p>6 (32nd)</p></td>
                                 
-                                    <td><p>Ricky Wysocki</p><p>6 (38th)</p></td>
+                                    <td><p>Chris Dickerson</p><p>6 (30th)</p></td>
                                 
 
                                 
@@ -305,9 +305,9 @@
                                 
                                     <td><p>Ezra Aderhold</p><p>9 (19th)</p></td>
                                 
-                                    <td><p>Casey White</p><p>5 (43rd)</p></td>
-                                
                                     <td><p>Cole Redalen</p><p>5 (50th)</p></td>
+                                
+                                    <td><p>Casey White</p><p>5 (43rd)</p></td>
                                 
 
                             </tr>
@@ -376,8 +376,137 @@
                 </tr>
             
     </table>
-    <img src="weekly.png", alt="weekly result plot">
-    <img src="bench.png", alt="bench result plot">
+</div>
+<div class="live_scores">
+    <h3><i>The Open at Austin</i> Live Score Calculator</h3>
+    <h4>Matchup 1</h4>
+    <table>
+        <tr>
+            <th>Max Players</th>
+            <th>Place</th>
+            <th>Points</th>
+            <th>Luc Players</th>
+            <th>Place</th>
+            <th>Points</th>
+        </tr>
+            
+                <tr>
+                    <td>Gannon Buhr</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Max-input"
+                            onchange="sumInputs('Max');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Max-points">0</td>
+                    <td>Niklas Anttila</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Luc-input"
+                            onchange="sumInputs('Luc');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Luc-points">0</td>
+                </tr>
+            
+                <tr>
+                    <td>Ezra Robinson</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Max-input"
+                            onchange="sumInputs('Max');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Max-points">0</td>
+                    <td>Anthony Barela</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Luc-input"
+                            onchange="sumInputs('Luc');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Luc-points">0</td>
+                </tr>
+            
+                <tr>
+                    <td>Adam Hammes</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Max-input"
+                            onchange="sumInputs('Max');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Max-points">0</td>
+                    <td>Andrew Marwede</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Luc-input"
+                            onchange="sumInputs('Luc');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Luc-points">0</td>
+                </tr>
+            
+                <tr>
+                    <td>Ezra Aderhold</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Max-input"
+                            onchange="sumInputs('Max');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Max-points">0</td>
+                    <td>Gavin Babcock</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Luc-input"
+                            onchange="sumInputs('Luc');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Luc-points">0</td>
+                </tr>
+            
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td id="Max-total"/>0</td>
+                <td></td>
+                <td>Total</td>
+                <td id="Luc-total"/>0</td>
+            </tr>
+    </table>
 </div>
 <div class="schedule">
     <h3>Schedule</h3>
@@ -842,5 +971,7 @@
             
     </table>
 </div>
+<img src="weekly.png", alt="weekly result plot">
+<img src="bench.png", alt="bench result plot">
 </body>
 </html>

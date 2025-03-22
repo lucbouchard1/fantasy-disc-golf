@@ -38,10 +38,22 @@ def build_lineups(tournamentData, numWeeks, coaches):
             lineups[coach].append({
                 'tournament': name,
                 'starters': [(p['entered_name'].title(), make_place_string(p['place']), p['points']) for _, p in
-                    teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'start')].sort_values(by='cash', ascending=False).iterrows()],
+                    teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'start')].sort_values(by='points', ascending=False).iterrows()],
                 'bench': [(p['entered_name'].title(), make_place_string(p['place']), p['points']) for _, p in
-                    teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'bench')].sort_values(by='cash', ascending=False).iterrows()],
+                    teamData[(teamData.week == w) & (teamData.coach == coach) & (teamData.status == 'bench')].sort_values(by='points', ascending=False).iterrows()],
             })
+
+    return lineups
+
+def build_live_score_lineups(tournamentData, week, coaches):
+    tournaments = dglib.get_tournaments(year=2025)
+    teamData = dglib.get_team_data(tournamentData, week, coaches, include_nonplaying=True)
+
+    lineups = {}
+
+    for coach in coaches:
+        lineups[coach] = [p['entered_name'].title() for _, p in
+                teamData[(teamData.week == week) & (teamData.coach == coach) & (teamData.status == 'start')].iterrows()]
 
     return lineups
 
@@ -117,6 +129,9 @@ def build_template_variables(year=2025):
 
     standings = build_standings(numWeeks, tournamentData, teamData, opponents)
     lineups = build_lineups(tournamentData, numWeeks, coaches)
+    liveWeek = numWeeks+1 if numWeeks+1 < len(schedule) else len(schedule)
+    liveScores = build_live_score_lineups(tournamentData, liveWeek, coaches)
+
     pointTotals = build_point_totals(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
@@ -138,7 +153,11 @@ def build_template_variables(year=2025):
         'playerTotals': playerTotals,
         'lineups': lineups,
         'schedule': schedule,
-        'tournaments': list(tournaments['tournament_name'])
+        'tournaments': list(tournaments['tournament_name']),
+        'liveWeek': liveWeek,
+        'matchup1': schedule[liveWeek][0],
+        'matchup2': schedule[liveWeek][1],
+        'liveScores': liveScores
     }
 
 
