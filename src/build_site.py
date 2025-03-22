@@ -26,16 +26,11 @@ def make_place_string(place):
         return str(place) + 'rd'
     return str(place) + 'th'
 
-def build_lineups(tournamentData, numWeeks):
+def build_lineups(tournamentData, numWeeks, coaches):
     tournaments = dglib.get_tournaments(year=2025)
-    teamData, _ = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
+    teamData = dglib.get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=True)
 
-    lineups = {
-        "Luc": [],
-        "Marina": [],
-        "Wyatt": [],
-        "Max": []
-    }
+    lineups = { c:[] for c in coaches }
 
     for coach in lineups:
         for w in range(1, numWeeks+1):
@@ -113,12 +108,15 @@ def build_standings(numWeeks, tournamentData, teamData, opponents):
     return standings
 
 def build_template_variables(year=2025):
-    numWeeks = len(dglib.get_tournaments(year=year))
+    coaches = ['Luc', 'Marina', 'Wyatt', 'Max']
+    tournaments = dglib.get_tournaments(year=year)
+    numWeeks = sum([isinstance(t.url, str) for _, t in tournaments.iterrows()])
     tournamentData = dglib.get_tournament_data(year=year)
-    teamData, opponents = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
+    schedule, opponents = dglib.get_schedule(coaches)
+    teamData = dglib.get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=True)
 
     standings = build_standings(numWeeks, tournamentData, teamData, opponents)
-    lineups = build_lineups(tournamentData, numWeeks)
+    lineups = build_lineups(tournamentData, numWeeks, coaches)
     pointTotals = build_point_totals(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
@@ -138,7 +136,9 @@ def build_template_variables(year=2025):
         'benchHeader': benchHeader,
         'benchTotals': benchTotals,
         'playerTotals': playerTotals,
-        'lineups': lineups
+        'lineups': lineups,
+        'schedule': schedule,
+        'tournaments': list(tournaments['tournament_name'])
     }
 
 

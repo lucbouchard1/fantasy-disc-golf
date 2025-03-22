@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import os.path
 import sys
+import math
 import scores
 
 from google.auth.transport.requests import Request
@@ -64,6 +65,58 @@ def make_opponents(schedule, coaches):
 
   return opponents
 
+def get_schedule(coaches):
+  """Shows basic usage of the Sheets API.
+  Prints values from a sample spreadsheet.
+  """
+  creds = None
+  # The file token.json stores the user's access and refresh tokens, and is
+  # created automatically when the authorization flow completes for the first
+  # time.
+  if os.path.exists("token.json"):
+    creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+  # If there are no (valid) credentials available, let the user log in.
+  if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+      creds.refresh(Request())
+    else:
+      flow = InstalledAppFlow.from_client_secrets_file(
+          "credentials.json", SCOPES
+      )
+      creds = flow.run_local_server(port=0)
+    # Save the credentials for the next run
+    with open("token.json", "w") as token:
+      token.write(creds.to_json())
+
+  try:
+    service = build("sheets", "v4", credentials=creds)
+
+    data_range = "Schedule!A1:F21"
+    # Call the Sheets API
+    sheet = service.spreadsheets()
+    result = (
+        sheet.values()
+        .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=data_range)
+        .execute()
+    )
+    values = result.get("values", [])
+    if not values:
+       print("No data found.")
+       return
+
+    schedule = []
+    for i in range(1, 21):
+      r = values[i]
+      schedule.append([
+         (r[2], r[3]),
+         (r[4], r[5])
+      ])
+    opponents = make_opponents(schedule, coaches)
+  except HttpError as err:
+    print(err)
+
+  return schedule, opponents
+
 def get_lineup_data(coaches, weeks):
   """Shows basic usage of the Sheets API.
   Prints values from a sample spreadsheet.
@@ -89,34 +142,13 @@ def get_lineup_data(coaches, weeks):
       token.write(creds.to_json())
 
   try:
+    _, opponents = get_schedule(coaches)
     service = build("sheets", "v4", credentials=creds)
-
-    data_range = "Schedule!A1:F" + str(weeks+1)
-    # Call the Sheets API
     sheet = service.spreadsheets()
-    result = (
-        sheet.values()
-        .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=data_range)
-        .execute()
-    )
-    values = result.get("values", [])
-    if not values:
-       print("No data found.")
-       return
-
-    schedule = []
-    for i in range(1, weeks+1):
-      r = values[i]
-      schedule.append([
-         (r[2], r[3]),
-         (r[4], r[5])
-      ])
-    opponents = make_opponents(schedule, coaches)
 
     for coach in coaches:
       data_range = coach + "!A1:J" + str(weeks+1)
       # Call the Sheets API
-      sheet = service.spreadsheets()
       result = (
           sheet.values()
           .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=data_range)
@@ -159,6 +191,8 @@ def get_tournament_data(year=2024):
 
     data = []
     for _, t in tournaments.iterrows():
+        if not isinstance(t.url, str):
+          continue
         d = pd.read_csv(folder + t.file, header=None)
         d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
         d.columns=['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
@@ -173,8 +207,8 @@ def get_tournament_data(year=2024):
     data['cash'] = data['prize'].str[1:].str.replace(',', '').astype(float).fillna(0)
     return data
 
-def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
-    lineups, opponents = get_lineup_data(['Luc', 'Marina', 'Wyatt', 'Max'], numWeeks)
+def get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=False):
+    lineups, opponents = get_lineup_data(coaches, numWeeks)
     pdgaMap = get_pdga_num_map()
 
     def name_to_pdga(name):
@@ -217,7 +251,7 @@ def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
     result = pd.merge(teamData, tournamentData, on=['week', 'pdga#'], how=('left' if include_nonplaying else 'inner'))
     result['cash'] = result['cash'].fillna(0)
     result['points'] = result['points'].fillna(0)
-    return result, opponents
+    return result
 
 if __name__ == "__main__":
   if len(sys.argv) != 2:
@@ -229,4 +263,6 @@ if __name__ == "__main__":
   tournaments = get_tournaments(year=year)
 
   for _, t in tournaments.iterrows():
+    if not isinstance(t.url, str):
+      continue
     download_tournament_data(t['url'], 'data/' + str(year) + '/' + t['file'])

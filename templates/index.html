@@ -138,6 +138,25 @@
     <img src="weekly.png", alt="weekly result plot">
     <img src="bench.png", alt="bench result plot">
 </div>
+<div class="schedule">
+    <h3>Schedule</h3>
+    <table>
+        <tr>
+            <th>Week</th>
+            <th>Tournament</th>
+            <th>Matchup 1</th>
+            <th>Matchup 2</th>
+        </tr>
+            {% for w in schedule %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ tournaments[loop.index-1] }}</td>
+                    <td>{{ w[0][0] + ', ' + w[0][1] }}</td>
+                    <td>{{ w[1][0] + ', ' + w[1][1] }}</td>
+                </tr>
+            {% endfor %}
+    </table>
+</div>
 <div class="player_totals">
     <h3>Player Season Totals</h3>
     <table>
