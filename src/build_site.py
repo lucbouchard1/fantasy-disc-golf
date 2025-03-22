@@ -1,6 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 import matplotlib.pyplot as plt
-import numpy as np
+import pandas as pd
 import dglib, math
 
 def make_weekly_plot(teamData, filename, status='start', title="Weekly Cash Totals"):
@@ -28,7 +28,7 @@ def make_place_string(place):
 
 def build_lineups(tournamentData, numWeeks):
     tournaments = dglib.get_tournaments(year=2025)
-    teamData = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
+    teamData, _ = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
 
     lineups = {
         "Luc": [],
@@ -51,15 +51,15 @@ def build_lineups(tournamentData, numWeeks):
     return lineups
 
 def build_player_totals(tournamentData, teamData):
-    seasonTotals = tournamentData[['name', 'cash']].groupby('name', as_index=False).agg(
-        cash=('cash', 'sum'),
-        avg=('cash', 'mean')
+    seasonTotals = tournamentData[['name', 'points']].groupby('name', as_index=False).agg(
+        points=('points', 'sum'),
+        avg=('points', 'mean')
     )
-    seasonTotals = seasonTotals.sort_values('cash', ascending=False).iloc[0:50]
+    seasonTotals = seasonTotals.sort_values('points', ascending=False).iloc[0:50]
 
     playerTotals = []
     for _, p in seasonTotals.iterrows():
-        playerTotals.append({'name': p['name'], 'cash': p['cash'], 'avg': p['avg']})
+        playerTotals.append({'name': p['name'], 'points': p['points'], 'avg': p['avg']})
 
     return playerTotals
 
@@ -75,30 +75,55 @@ def build_weekly_results(tournamentData, teamData, status='start'):
 
     return weekly, list(weeklyDf.columns)
 
-def build_standings(tournamentData, teamData, status='start'):
+def build_point_totals(tournamentData, teamData, status='start'):
     df = teamData[teamData.status == status]
     weekly = df[['week', 'coach', 'points']].groupby(by=['week', 'coach'], as_index=False).sum()
     weekly = weekly.pivot(index="week", columns="coach", values="points")
     totals = weekly.sum().sort_values(ascending=False)
 
-    standings = []
+    point_totals = []
     for t in totals.items():
-        standings.append(
+        point_totals.append(
             {'name': t[0], 'points': t[1]}
+        )
+    return point_totals
+
+def build_standings(numWeeks, tournamentData, teamData, opponents):
+    df = teamData[teamData.status == 'start']
+    weekly = df[['week', 'coach', 'opponent', 'points']].groupby(by=['week', 'coach'], as_index=False).agg({
+        'points': 'sum',
+        'opponent': 'first'
+    })
+    opps = weekly[['week', 'opponent']]
+    r = opps.merge(weekly[['week', 'coach', 'points']],
+            left_on=['week', 'opponent'],
+            right_on=['week', 'coach']
+        )
+    weekly['opponent_points'] = r['points']
+    weekly['win'] = weekly['opponent_points'] < weekly['points']
+    totals = weekly[['coach', 'win']].groupby(by='coach', as_index=False).sum()
+    totals['record'] = totals['win'] / numWeeks
+    totals = totals.sort_values('record', ascending=False)
+
+    standings = []
+    for _, r in totals.iterrows():
+        standings.append(
+            {'name': r['coach'], 'record': r['record']}
         )
     return standings
 
 def build_template_variables(year=2025):
     numWeeks = len(dglib.get_tournaments(year=year))
     tournamentData = dglib.get_tournament_data(year=year)
-    teamData = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
+    teamData, opponents = dglib.get_team_data(tournamentData, numWeeks, include_nonplaying=True)
 
+    standings = build_standings(numWeeks, tournamentData, teamData, opponents)
     lineups = build_lineups(tournamentData, numWeeks)
-    standings = build_standings(tournamentData, teamData)
+    pointTotals = build_point_totals(tournamentData, teamData)
     playerTotals = build_player_totals(tournamentData, teamData)
     weekly, weeklyHeader = build_weekly_results(tournamentData, teamData)
     bench, benchHeader = build_weekly_results(tournamentData, teamData, status='bench')
-    benchTotals = build_standings(tournamentData, teamData, status='bench')
+    benchTotals = build_point_totals(tournamentData, teamData, status='bench')
     make_weekly_plot(teamData, 'weekly.png')
     make_weekly_plot(teamData, 'bench.png', status='bench', title="Bench Cash Totals")
 
@@ -106,6 +131,7 @@ def build_template_variables(year=2025):
         'currentYear': 2025,
         'currentWeek': numWeeks,
         'standings': standings,
+        'pointTotals': pointTotals,
         'weekly': weekly,
         'weeklyHeader': weeklyHeader,
         'bench': bench,

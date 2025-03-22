@@ -12,14 +12,14 @@
         <tr>
             <th>Place</th>
             <th>Name</th>
-            <th>Points</th>
+            <th>Record</th>
         </tr>
         {% for s in standings %}
-          <tr>
+            <tr>
             <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
-            <td>{{ s.points|int }}</td>
-          </tr>
+            <td>{{ '%0.3f'|format(s.record) }}</td>
+            </tr>
         {% endfor %}
     </table>
     <h4>Weekly Results</h4>
@@ -40,6 +40,19 @@
                     {% endfor %}
                 </tr>
             {% endfor %}
+    </table>
+    <h4>Point Totals</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Points</th>
+        </tr>
+        {% for s in pointTotals %}
+          <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.points|int }}</td>
+          </tr>
+        {% endfor %}
     </table>
 </div>
 <div class="lineups">
@@ -93,13 +106,11 @@
     <h3>Bench Points</h3>
     <table>
         <tr>
-            <th>Place</th>
             <th>Name</th>
-            <th>Cash</th>
+            <th>Points</th>
         </tr>
         {% for s in benchTotals %}
           <tr>
-            <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
             <td>{{ s.points|int }}</td>
           </tr>
@@ -132,14 +143,14 @@
     <table>
         <tr>
             <th>Player</th>
-            <th>Total Cash</th>
-            <th>Average Cash</th>
+            <th>Total Points</th>
+            <th>Average Points</th>
         </tr>
             {% for p in playerTotals %}
                 <tr>
                     <td>{{ p.name }}</td>
-                    <td>{{ "${:,.0f}".format(p.cash) }}</td>
-                    <td>{{ "${:,.0f}".format(p.avg) }}</td>
+                    <td>{{ p.points | int }}</td>
+                    <td>{{ '%.1f'|format(p.avg) }}</td>
                 </tr>
             {% endfor %}
     </table>

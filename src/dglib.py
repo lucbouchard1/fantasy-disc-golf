@@ -51,6 +51,19 @@ def download_tournament_data(url, csv_file):
   df = pd.DataFrame(result)
   df.to_csv(csv_file, header=False, index=False)
 
+def make_opponents(schedule, coaches):
+  opponents = []
+
+  for s in schedule:
+    opps = {}
+    for c in coaches:
+      for matchup in s:
+          if c in matchup:
+            opps[c] = list(filter(lambda n: n != c, matchup))[0]
+    opponents.append(opps)
+
+  return opponents
+
 def get_lineup_data(coaches, weeks):
   """Shows basic usage of the Sheets API.
   Prints values from a sample spreadsheet.
@@ -78,8 +91,30 @@ def get_lineup_data(coaches, weeks):
   try:
     service = build("sheets", "v4", credentials=creds)
 
+    data_range = "Schedule!A1:F" + str(weeks+1)
+    # Call the Sheets API
+    sheet = service.spreadsheets()
+    result = (
+        sheet.values()
+        .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=data_range)
+        .execute()
+    )
+    values = result.get("values", [])
+    if not values:
+       print("No data found.")
+       return
+
+    schedule = []
+    for i in range(1, weeks+1):
+      r = values[i]
+      schedule.append([
+         (r[2], r[3]),
+         (r[4], r[5])
+      ])
+    opponents = make_opponents(schedule, coaches)
+
     for coach in coaches:
-      data_range = coach + "!A1:M" + str(weeks+1)
+      data_range = coach + "!A1:J" + str(weeks+1)
       # Call the Sheets API
       sheet = service.spreadsheets()
       result = (
@@ -109,7 +144,7 @@ def get_lineup_data(coaches, weeks):
   except HttpError as err:
     print(err)
 
-  return data_frames
+  return data_frames, opponents
 
 def get_pdga_num_map():
     pdgaDb = pd.read_csv('data/pdga_db.csv')
@@ -139,7 +174,7 @@ def get_tournament_data(year=2024):
     return data
 
 def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
-    lineups = get_lineup_data(['Luc', 'Marina', 'Wyatt', 'Max'], numWeeks)
+    lineups, opponents = get_lineup_data(['Luc', 'Marina', 'Wyatt', 'Max'], numWeeks)
     pdgaMap = get_pdga_num_map()
 
     def name_to_pdga(name):
@@ -160,28 +195,29 @@ def get_team_data(tournamentData, numWeeks, include_nonplaying=False):
             for p in range(4):
                 curr = row['Start ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'start'))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'start', opponents[w][coach]))
                 else:
                     d.append(None)
 
             for p in range(3):
                 curr = row['Bench ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'bench'))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'bench', opponents[w][coach]))
                 else:
                     d.append(None)
 
             if (not pd.isnull(row['Injury Reserve'])):
-                d.append((row.Week, row['Injury Reserve'], name_to_pdga(row['Injury Reserve']), 'injury'))
+                d.append((row.Week, row['Injury Reserve'], name_to_pdga(row['Injury Reserve']), 'injury', opponents[w][coach]))
 
-        d = pd.DataFrame(d, columns=['week', 'entered_name', 'pdga#', 'status'])
+        d = pd.DataFrame(d, columns=['week', 'entered_name', 'pdga#', 'status', 'opponent'])
         d['coach'] = coach
         data.append(d)
 
     teamData = pd.concat(data)
     result = pd.merge(teamData, tournamentData, on=['week', 'pdga#'], how=('left' if include_nonplaying else 'inner'))
     result['cash'] = result['cash'].fillna(0)
-    return result
+    result['points'] = result['points'].fillna(0)
+    return result, opponents
 
 if __name__ == "__main__":
   if len(sys.argv) != 2:
