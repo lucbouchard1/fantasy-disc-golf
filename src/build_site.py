@@ -178,8 +178,8 @@ def build_template_variables(year=2025):
         'schedule': schedule,
         'tournaments': list(tournaments['tournament_name']),
         'liveWeek': liveWeek,
-        'matchup1': schedule[liveWeek][0],
-        'matchup2': schedule[liveWeek][1],
+        'matchup1': schedule[liveWeek - 1][0],
+        'matchup2': schedule[liveWeek - 1][1],
         'liveScores': liveScores
     }
 
