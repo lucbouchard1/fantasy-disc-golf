@@ -11,10 +11,10 @@
     <h4>Matchup 1</h4>
     <table>
         <tr>
-            <th>{{ matchup1[0] }} Players</th>
+            <th>{{ matchup1[0] }}</th>
             <th>Place</th>
             <th>Points</th>
-            <th>{{ matchup1[1] }} Players</th>
+            <th>{{ matchup1[1] }}</th>
             <th>Place</th>
             <th>Points</th>
         </tr>
@@ -53,6 +53,53 @@
                 <td></td>
                 <td>Total</td>
                 <td id="{{ matchup1[1] }}-total"/>0</td>
+            </tr>
+    </table>
+    <h4>Matchup 2</h4>
+    <table>
+        <tr>
+            <th>{{ matchup2[0] }}</th>
+            <th>Place</th>
+            <th>Points</th>
+            <th>{{ matchup2[1] }}</th>
+            <th>Place</th>
+            <th>Points</th>
+        </tr>
+            {% for i in range(4) %}
+                <tr>
+                    <td>{{ liveScores[matchup2[0]][i] }}</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="{{ matchup2[0] }}-input"
+                            onchange="sumInputs('{{ matchup2[0] }}');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="{{ matchup2[0] }}-points">0</td>
+                    <td>{{ liveScores[matchup2[1]][i] }}</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="{{ matchup2[1] }}-input"
+                            onchange="sumInputs('{{ matchup2[1] }}');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="{{ matchup2[1] }}-points">0</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td id="{{ matchup2[0] }}-total"/>0</td>
+                <td></td>
+                <td>Total</td>
+                <td id="{{ matchup2[1] }}-total"/>0</td>
             </tr>
     </table>
 </div>

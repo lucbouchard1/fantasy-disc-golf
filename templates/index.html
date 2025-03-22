@@ -28,10 +28,27 @@
         <tr>
             <th>Week</th>
             <th>Tournament</th>
+            <th>Matchup</th>
             {% for h in weeklyHeader %}
                 <th>{{ h }}</th>
             {% endfor %}
         </tr>
+            {% for w in schedule %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ tournaments[loop.index-1] }}</td>
+                    <td>{{ w[0][0] + '/' + w[0][1] + ', ' + w[1][0] + '/' + w[1][1] }}</td>
+                    {% if loop.index <= weekly|length %}
+                        {% for d in weekly[loop.index-1][1:] %}
+                            <td>{{ d|int }}</td>
+                        {% endfor %}
+                    {% else %}
+                        {% for d in weekly[0][1:] %}
+                            <td></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
             {% for w in weekly %}
                 <tr>
                     <td>{{ loop.index }}</td>
@@ -54,6 +71,25 @@
             <td>{{ s.points|int }}</td>
           </tr>
         {% endfor %}
+    </table>
+</div>
+<div class="schedule">
+    <h3>Schedule</h3>
+    <table>
+        <tr>
+            <th>Week</th>
+            <th>Tournament</th>
+            <th>Matchup 1</th>
+            <th>Matchup 2</th>
+        </tr>
+            {% for w in schedule %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ tournaments[loop.index-1] }}</td>
+                    <td>{{ w[0][0] + ', ' + w[0][1] }}</td>
+                    <td>{{ w[1][0] + ', ' + w[1][1] }}</td>
+                </tr>
+            {% endfor %}
     </table>
 </div>
 <div class="lineups">
@@ -133,25 +169,6 @@
                     {% for d in w[1:] %}
                         <td>{{ d|int }}</td>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-    </table>
-</div>
-<div class="schedule">
-    <h3>Schedule</h3>
-    <table>
-        <tr>
-            <th>Week</th>
-            <th>Tournament</th>
-            <th>Matchup 1</th>
-            <th>Matchup 2</th>
-        </tr>
-            {% for w in schedule %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ tournaments[loop.index-1] }}</td>
-                    <td>{{ w[0][0] + ', ' + w[0][1] }}</td>
-                    <td>{{ w[1][0] + ', ' + w[1][1] }}</td>
                 </tr>
             {% endfor %}
     </table>
