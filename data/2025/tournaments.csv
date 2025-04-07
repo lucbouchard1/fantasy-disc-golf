@@ -1,7 +1,7 @@
 week,type,tournament_name,url,file
 1,es,"Waco",https://www.pdga.com/tour/event/88277,tournaments/1_waco.csv
 2,es,"The Open at Austin",https://www.pdga.com/tour/event/88279,tournaments/2_austin.csv
-3,es,"Music City",NULL,tournaments/3_music_city.csv
+3,es,"Music City",https://www.pdga.com/tour/event/88279,tournaments/3_music_city.csv
 4,es,"Kansas Wide Open",NULL,tournaments/4_kansas.csv
 5,es,"Champions Cup",NULL,tournaments/5_champions_cup.csv
 6,es,"Cascade Challenge",NULL,tournaments/6_cascade.csv
