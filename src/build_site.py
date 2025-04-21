@@ -78,7 +78,7 @@ def build_weekly_results(tournamentData, teamData, status='start'):
 
     weekly = []
     for i, w in weeklyDf.iterrows():
-        weekly.append([tournaments.iloc[i-1]['tournament_name']] + list(w))
+        weekly.append([tournaments.iloc[int(i-1)]['tournament_name']] + list(w))
 
     return weekly, list(weeklyDf.columns)
 

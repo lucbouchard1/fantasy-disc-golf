@@ -5,21 +5,33 @@
     <link rel="stylesheet" href="style.css">
     <script src="live.js"></script>
 <body>
-<h2><i>Kansas Wide Open</i> Live Score Calculator</h2>
+<h2><i>Champions Cup</i> Live Score Calculator</h2>
 <a href="index.html"><h4>2025 FDG Standings</h4></a>
 <div class="live_scores">
     <h4>Matchup 1</h4>
     <table>
         <tr>
-            <th>Luc</th>
+            <th>Wyatt</th>
             <th>Place</th>
             <th>Points</th>
-            <th>Marina</th>
+            <th>Luc</th>
             <th>Place</th>
             <th>Points</th>
         </tr>
             
                 <tr>
+                    <td>Ricky Wysocki</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Wyatt-input"
+                            onchange="sumInputs('Wyatt');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Wyatt-points">0</td>
                     <td></td>
                     <td>
                         <input
@@ -32,21 +44,21 @@
                         />
                     </td>
                     <td class="Luc-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Marina-input"
-                            onchange="sumInputs('Marina');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Marina-points">0</td>
                 </tr>
             
                 <tr>
+                    <td>Paul Mcbeth</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Wyatt-input"
+                            onchange="sumInputs('Wyatt');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Wyatt-points">0</td>
                     <td></td>
                     <td>
                         <input
@@ -59,21 +71,21 @@
                         />
                     </td>
                     <td class="Luc-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Marina-input"
-                            onchange="sumInputs('Marina');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Marina-points">0</td>
                 </tr>
             
                 <tr>
+                    <td>Isaac Robinson</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Wyatt-input"
+                            onchange="sumInputs('Wyatt');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Wyatt-points">0</td>
                     <td></td>
                     <td>
                         <input
@@ -86,21 +98,21 @@
                         />
                     </td>
                     <td class="Luc-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Marina-input"
-                            onchange="sumInputs('Marina');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Marina-points">0</td>
                 </tr>
             
                 <tr>
+                    <td>Austin Turner</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="Wyatt-input"
+                            onchange="sumInputs('Wyatt');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Wyatt-points">0</td>
                     <td></td>
                     <td>
                         <input
@@ -113,36 +125,24 @@
                         />
                     </td>
                     <td class="Luc-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Marina-input"
-                            onchange="sumInputs('Marina');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Marina-points">0</td>
                 </tr>
             
             <tr>
                 <td></td>
                 <td>Total</td>
-                <td id="Luc-total"/>0</td>
+                <td id="Wyatt-total"/>0</td>
                 <td></td>
                 <td>Total</td>
-                <td id="Marina-total"/>0</td>
+                <td id="Luc-total"/>0</td>
             </tr>
     </table>
     <h4>Matchup 2</h4>
     <table>
         <tr>
-            <th>Max</th>
+            <th>Marina</th>
             <th>Place</th>
             <th>Points</th>
-            <th>Wyatt</th>
+            <th>Max</th>
             <th>Place</th>
             <th>Points</th>
         </tr>
@@ -152,6 +152,18 @@
                     <td>
                         <input
                             type="number"
+                            class="Marina-input"
+                            onchange="sumInputs('Marina');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Marina-points">0</td>
+                    <td></td>
+                    <td>
+                        <input
+                            type="number"
                             class="Max-input"
                             onchange="sumInputs('Max');"
                             onkeypress = "this.onchange();"
@@ -160,18 +172,6 @@
                         />
                     </td>
                     <td class="Max-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Wyatt-input"
-                            onchange="sumInputs('Wyatt');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Wyatt-points">0</td>
                 </tr>
             
                 <tr>
@@ -179,6 +179,18 @@
                     <td>
                         <input
                             type="number"
+                            class="Marina-input"
+                            onchange="sumInputs('Marina');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Marina-points">0</td>
+                    <td></td>
+                    <td>
+                        <input
+                            type="number"
                             class="Max-input"
                             onchange="sumInputs('Max');"
                             onkeypress = "this.onchange();"
@@ -187,18 +199,6 @@
                         />
                     </td>
                     <td class="Max-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Wyatt-input"
-                            onchange="sumInputs('Wyatt');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Wyatt-points">0</td>
                 </tr>
             
                 <tr>
@@ -206,6 +206,18 @@
                     <td>
                         <input
                             type="number"
+                            class="Marina-input"
+                            onchange="sumInputs('Marina');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Marina-points">0</td>
+                    <td></td>
+                    <td>
+                        <input
+                            type="number"
                             class="Max-input"
                             onchange="sumInputs('Max');"
                             onkeypress = "this.onchange();"
@@ -214,18 +226,6 @@
                         />
                     </td>
                     <td class="Max-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Wyatt-input"
-                            onchange="sumInputs('Wyatt');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Wyatt-points">0</td>
                 </tr>
             
                 <tr>
@@ -233,6 +233,18 @@
                     <td>
                         <input
                             type="number"
+                            class="Marina-input"
+                            onchange="sumInputs('Marina');"
+                            onkeypress = "this.onchange();"
+                            onpaste    = "this.onchange();"
+                            oninput    = "this.onchange();"
+                        />
+                    </td>
+                    <td class="Marina-points">0</td>
+                    <td></td>
+                    <td>
+                        <input
+                            type="number"
                             class="Max-input"
                             onchange="sumInputs('Max');"
                             onkeypress = "this.onchange();"
@@ -241,27 +253,15 @@
                         />
                     </td>
                     <td class="Max-points">0</td>
-                    <td></td>
-                    <td>
-                        <input
-                            type="number"
-                            class="Wyatt-input"
-                            onchange="sumInputs('Wyatt');"
-                            onkeypress = "this.onchange();"
-                            onpaste    = "this.onchange();"
-                            oninput    = "this.onchange();"
-                        />
-                    </td>
-                    <td class="Wyatt-points">0</td>
                 </tr>
             
             <tr>
                 <td></td>
                 <td>Total</td>
-                <td id="Max-total"/>0</td>
+                <td id="Marina-total"/>0</td>
                 <td></td>
                 <td>Total</td>
-                <td id="Wyatt-total"/>0</td>
+                <td id="Max-total"/>0</td>
             </tr>
     </table>
 </div>
