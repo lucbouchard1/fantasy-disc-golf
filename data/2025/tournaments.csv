@@ -3,7 +3,7 @@ week,type,tournament_name,url,file
 2,es,"The Open at Austin",https://www.pdga.com/tour/event/88279,tournaments/2_austin.csv
 3,es,"Music City",https://www.pdga.com/tour/event/88282,tournaments/3_music_city.csv
 4,es,"Kansas Wide Open",https://www.pdga.com/tour/event/88283,tournaments/4_kansas.csv
-5,es,"Champions Cup",NULL,tournaments/5_champions_cup.csv
+5,es,"Champions Cup",https://www.pdga.com/tour/event/88638,tournaments/5_champions_cup.csv
 6,es,"Cascade Challenge",NULL,tournaments/6_cascade.csv
 7,es,"Konopiste Open",NULL,tournaments/7_konopiste.csv
 8,es,"Northwest DGC",NULL,tournaments/8_northwest_dgc.csv
