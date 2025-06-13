@@ -5,17 +5,15 @@ week,type,tournament_name,url,file
 4,es,"Kansas Wide Open",https://www.pdga.com/tour/event/88283,tournaments/4_kansas.csv
 5,es,"Champions Cup",https://www.pdga.com/tour/event/88638,tournaments/5_champions_cup.csv
 6,es,"Cascade Challenge",https://www.pdga.com/tour/event/88284,tournaments/6_cascade.csv
-7,es,"Konopiste Open",NULL,tournaments/7_konopiste.csv
-8,es,"Northwest DGC",NULL,tournaments/8_northwest_dgc.csv
-9,es,"Ale Open",NULL,tournaments/9_ale.csv
-10,es,"Preserve",NULL,tournaments/10_preserve.csv
-11,es,"Discmania Challenge",NULL,tournaments/11_discmania.csv
-12,es,"PCS Open",NULL,tournaments/12_pcs.csv
-13,es,"Krokhol Open",NULL,tournaments/13_krokhol.csv
-14,es,"European DG Festival",NULL,tournaments/14_euro_dg.csv
-15,m,"World Championships",NULL,tournaments/15_worlds.csv
-16,es,"Turku Open",NULL,tournaments/16_turku.csv
-17,es,"Ledgestone Open",NULL,tournaments/17_ledgestone.csv
-18,es,"Idlewild",NULL,tournaments/18_idlewild.csv
-19,es,"DGLO",NULL,tournaments/19_dglo.csv
-20,es,"Green Mountain",NULL,tournaments/20_green_mountain.csv
+7,es,"Northwest DGC",https://www.pdga.com/tour/event/88286,tournaments/8_northwest_dgc.csv
+8,es,"Preserve",NULL,tournaments/10_preserve.csv
+9,es,"Discmania Challenge",NULL,tournaments/11_discmania.csv
+10,es,"PCS Open",NULL,tournaments/12_pcs.csv
+11,es,"Krokhol Open",NULL,tournaments/13_krokhol.csv
+12,es,"European DG Festival",NULL,tournaments/14_euro_dg.csv
+13,m,"World Championships",NULL,tournaments/15_worlds.csv
+14,es,"Turku Open",NULL,tournaments/16_turku.csv
+15,es,"Ledgestone Open",NULL,tournaments/17_ledgestone.csv
+16,es,"Idlewild",NULL,tournaments/18_idlewild.csv
+17,es,"DGLO",NULL,tournaments/19_dglo.csv
+18,es,"Green Mountain",NULL,tournaments/20_green_mountain.csv

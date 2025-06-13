@@ -105,7 +105,7 @@ def get_schedule(coaches):
        return
 
     schedule = []
-    for i in range(1, 21):
+    for i in range(1, 19):
       r = values[i]
       schedule.append([
          (r[2], r[3]),
