@@ -6,7 +6,7 @@ week,type,tournament_name,url,file
 5,es,"Champions Cup",https://www.pdga.com/tour/event/88638,tournaments/5_champions_cup.csv
 6,es,"Cascade Challenge",https://www.pdga.com/tour/event/88284,tournaments/6_cascade.csv
 7,es,"Northwest DGC",https://www.pdga.com/tour/event/88286,tournaments/8_northwest_dgc.csv
-8,es,"Preserve",NULL,tournaments/10_preserve.csv
+8,es,"Preserve",https://www.pdga.com/tour/event/88357,tournaments/10_preserve.csv
 9,es,"Discmania Challenge",NULL,tournaments/11_discmania.csv
 10,es,"PCS Open",NULL,tournaments/12_pcs.csv
 11,es,"Krokhol Open",NULL,tournaments/13_krokhol.csv
