@@ -14,13 +14,30 @@
             <th>Place</th>
             <th>Name</th>
             <th>Record</th>
+            <th>W</th>
+            <th>L</th>
         </tr>
         {% for s in standings %}
             <tr>
             <td>{{ loop.index }}</td>
             <td>{{ s.name }}</td>
             <td>{{ '%0.3f'|format(s.record) }}</td>
+            <td>{{ s.wins }}</td>
+            <td>{{ s.losses }}</td>
             </tr>
+        {% endfor %}
+    </table>
+    <h4>Point Totals</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Points</th>
+        </tr>
+        {% for s in pointTotals %}
+          <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.points|int }}</td>
+          </tr>
         {% endfor %}
     </table>
     <h4>Weekly Results</h4>
@@ -50,19 +67,6 @@
                     {% endif %}
                 </tr>
             {% endfor %}
-    </table>
-    <h4>Point Totals</h3>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Points</th>
-        </tr>
-        {% for s in pointTotals %}
-          <tr>
-            <td>{{ s.name }}</td>
-            <td>{{ s.points|int }}</td>
-          </tr>
-        {% endfor %}
     </table>
 </div>
 <div class="lineups">

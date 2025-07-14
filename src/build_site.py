@@ -136,7 +136,7 @@ def build_standings(numWeeks, tournamentData, teamData, opponents):
     standings = []
     for _, r in totals.iterrows():
         standings.append(
-            {'name': r['coach'], 'record': r['record']}
+            {'name': r['coach'], 'record': r['record'], 'wins': r['win'], 'losses': numWeeks - r['win']}
         )
     return standings
 
