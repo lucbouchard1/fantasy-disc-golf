@@ -10,10 +10,9 @@ week,type,tournament_name,url,file
 9,es,"Discmania Challenge",https://www.pdga.com/tour/event/88288,tournaments/11_discmania.csv
 10,es,"PCS Open",https://www.pdga.com/tour/event/88289,tournaments/12_pcs.csv
 11,es,"Krokhol Open",https://www.pdga.com/tour/event/90652,tournaments/13_krokhol.csv
-12,es,"European DG Festival",NULL,tournaments/14_euro_dg.csv
-13,m,"World Championships",NULL,tournaments/15_worlds.csv
-14,es,"Turku Open",NULL,tournaments/16_turku.csv
-15,es,"Ledgestone Open",NULL,tournaments/17_ledgestone.csv
-16,es,"Idlewild",NULL,tournaments/18_idlewild.csv
-17,es,"DGLO",NULL,tournaments/19_dglo.csv
-18,es,"Green Mountain",NULL,tournaments/20_green_mountain.csv
+12,es,"European DG Festival",https://www.pdga.com/tour/event/89546,tournaments/14_euro_dg.csv
+13,m,"World Championships",https://www.pdga.com/tour/event/90947,tournaments/15_worlds.csv
+14,es,"Ledgestone Open",https://www.pdga.com/tour/event/88293,tournaments/17_ledgestone.csv
+15,es,"Idlewild",https://www.pdga.com/tour/event/88294,tournaments/18_idlewild.csv
+16,es,"DGLO",NULL,tournaments/19_dglo.csv
+17,es,"Green Mountain",NULL,tournaments/20_green_mountain.csv
