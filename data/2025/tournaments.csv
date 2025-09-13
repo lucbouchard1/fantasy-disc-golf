@@ -14,5 +14,5 @@ week,type,tournament_name,url,file
 13,m,"World Championships",https://www.pdga.com/tour/event/90947,tournaments/15_worlds.csv
 14,es,"Ledgestone Open",https://www.pdga.com/tour/event/88293,tournaments/17_ledgestone.csv
 15,es,"Idlewild",https://www.pdga.com/tour/event/88294,tournaments/18_idlewild.csv
-16,es,"DGLO",NULL,tournaments/19_dglo.csv
+16,es,"DGLO",https://www.pdga.com/tour/event/88296,tournaments/19_dglo.csv
 17,es,"Green Mountain",NULL,tournaments/20_green_mountain.csv
