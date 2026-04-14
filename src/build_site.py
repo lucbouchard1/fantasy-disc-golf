@@ -163,7 +163,7 @@ def build_template_variables(year=2026):
     make_weekly_plot(teamData, 'bench.png', status='bench', title="Bench Cash Totals")
 
     return {
-        'currentYear': 2025,
+        'currentYear': year,
         'currentWeek': numWeeks,
         'standings': standings,
         'pointTotals': pointTotals,
