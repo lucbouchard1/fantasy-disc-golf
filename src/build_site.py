@@ -52,7 +52,7 @@ def build_live_score_lineups(tournamentData, week, coaches):
     lineups = {}
 
     for coach in coaches:
-        lineups[coach] = [p['entered_name'].title() for _, p in
+        lineups[coach] = [{'name': p['entered_name'].title(), 'division': p['division']} for _, p in
                 teamData[(teamData.week == week) & (teamData.coach == coach) & (teamData.status == 'start')].iterrows()]
 
     return lineups

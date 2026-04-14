@@ -52,9 +52,10 @@ scores = {
     50:	5,
 }
 
-function getPoints(place) {
+function getPoints(place, division) {
+    const mult = diviosn == "fpo" ? 0.6 : 1
     if (place in scores) {
-        return scores[place];
+        return scores[place] * mult;
     }
     return 0;
 }
@@ -65,8 +66,9 @@ function sumInputs(player) {
     var total = document.getElementById(player + '-total');
     var sum = 0;
     for (var i = 0; i < inputs.length; i++) {
+        var division = inputs[i].classList.contains('fpo') ? 'fpo' : 'mpo'
         var place = parseInt(inputs[i].value) || 0;
-        var score = getPoints(place);
+        var score = getPoints(place, division);
         points[i].textContent = score.toString();
         sum += score;
     }
