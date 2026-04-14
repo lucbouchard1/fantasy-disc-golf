@@ -18,6 +18,9 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = "1LNVpzm436wZasqLIMrrqv9IL_odFZnBzNZxwe-iVLFw"
 
+BANNED_PLAYER_LIST = [
+   "gannon buhr"
+]
 
 def parse_pdga_results_to_df(soup, table_id):
   table = soup.find(id=table_id)
@@ -191,6 +194,19 @@ def get_pdga_num_map():
 def get_tournaments(year=2024):
     return pd.read_csv('data/' + str(year) + '/tournaments.csv')
 
+def ban_players_from_tournament(d):
+    pdgamap = get_pdga_num_map()
+    for b in BANNED_PLAYER_LIST:
+        b_num = pdgamap[b]
+        result = d.loc[d['pdga#'] == b_num]
+        if result.empty:
+           continue
+        place = result['place'].iloc[0]
+        d.drop(result.index, inplace=True)
+        is_tie = not d[d['place'] == place].empty
+        if not is_tie:
+            d.loc[d['place'] > place, 'place'] -= 1
+
 def get_tournament_data(year=2024):
     folder = 'data/' + str(year) + '/'
     tournaments = get_tournaments(year=year)
@@ -208,6 +224,7 @@ def get_tournament_data(year=2024):
           d['tournament'] = t.tournament_name
           d['division'] = division
           d['points'] = d['place'].apply(scores.get_mpo_points if division == 'mpo' else scores.get_fpo_points)
+          ban_players_from_tournament(d)
           data.append(d)
 
     data = pd.concat(data)
