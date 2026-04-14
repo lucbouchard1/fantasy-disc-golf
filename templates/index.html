@@ -53,7 +53,7 @@
             {% for w in schedule %}
                 {% set i = loop.index0 %}
                 <tr>
-                    <td>{{ i }}</td>
+                    <td>{{ i+1 }}</td>
                     <td>{{ tournaments[i] }}</td>
                     <td>{{ w[0][0] + '/' + w[0][1] + ', ' + w[1][0] + '/' + w[1][1] }}</td>
                     {% if i < weekly|length %}

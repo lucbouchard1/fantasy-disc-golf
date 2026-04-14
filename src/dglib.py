@@ -223,8 +223,8 @@ def get_tournament_data(year=2024):
           d['week'] = t.week
           d['tournament'] = t.tournament_name
           d['division'] = division
-          d['points'] = d['place'].apply(scores.get_mpo_points if division == 'mpo' else scores.get_fpo_points)
           ban_players_from_tournament(d)
+          d['points'] = d['place'].apply(scores.get_mpo_points if division == 'mpo' else scores.get_fpo_points)
           data.append(d)
 
     data = pd.concat(data)
