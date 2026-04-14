@@ -16,7 +16,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # The ID and range of a sample spreadsheet.
-SAMPLE_SPREADSHEET_ID = "1mFoRynABSL416epHZq7LQ12L6CHh6VixLPOQJrTW81M"
+SAMPLE_SPREADSHEET_ID = "1LNVpzm436wZasqLIMrrqv9IL_odFZnBzNZxwe-iVLFw"
 
 
 def parse_pdga_results_to_df(soup, table_id):
@@ -153,7 +153,7 @@ def get_lineup_data(coaches, weeks):
     sheet = service.spreadsheets()
 
     for coach in coaches:
-      data_range = coach + "!A1:J" + str(weeks+1)
+      data_range = coach + "!A1:M" + str(weeks+1)
       # Call the Sheets API
       result = (
           sheet.values()
@@ -186,7 +186,7 @@ def get_lineup_data(coaches, weeks):
 
 def get_pdga_num_map():
     pdgaDb = pd.read_csv('data/pdga_db.csv')
-    return {row['name']: row['pdga#'] for _, row in pdgaDb.iterrows()}
+    return {row['name'].lower(): row['pdga#'] for _, row in pdgaDb.iterrows()}
 
 def get_tournaments(year=2024):
     return pd.read_csv('data/' + str(year) + '/tournaments.csv')
@@ -234,31 +234,17 @@ def get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=False):
 
         for w in range(numWeeks):
             row = raw.iloc[w]
+            for p in range(6):
+                curr = row['Start ' + str(p+1)]
+                if isinstance(curr, str):
+                    d.append((row.Week, curr, name_to_pdga(curr), 'start', opponents[w][coach]))
+                else:
+                    d.append(None)
+
             for p in range(4):
-                curr = row['MPO Start ' + str(p+1)]
+                curr = row['Bench ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'mpo_start', opponents[w][coach]))
-                else:
-                    d.append(None)
-
-            for p in range(2):
-                curr = row['FPO Start ' + str(p+1)]
-                if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'fpo_start', opponents[w][coach]))
-                else:
-                    d.append(None)
-
-            for p in range(2):
-                curr = row['MPO Bench ' + str(p+1)]
-                if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'mpo_bench', opponents[w][coach]))
-                else:
-                    d.append(None)
-
-            for p in range(2):
-                curr = row['FPO Bench ' + str(p+1)]
-                if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'fpo_bench', opponents[w][coach]))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'bench', opponents[w][coach]))
                 else:
                     d.append(None)
 

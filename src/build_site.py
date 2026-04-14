@@ -27,7 +27,7 @@ def make_place_string(place):
     return str(place) + 'th'
 
 def build_lineups(tournamentData, numWeeks, coaches):
-    tournaments = dglib.get_tournaments(year=2025)
+    tournaments = dglib.get_tournaments(year=2026)
     teamData = dglib.get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=True)
 
     lineups = { c:[] for c in coaches }
@@ -46,7 +46,7 @@ def build_lineups(tournamentData, numWeeks, coaches):
     return lineups
 
 def build_live_score_lineups(tournamentData, week, coaches):
-    tournaments = dglib.get_tournaments(year=2025)
+    tournaments = dglib.get_tournaments(year=2026)
     teamData = dglib.get_team_data(tournamentData, week, coaches, include_nonplaying=True)
 
     lineups = {}
@@ -72,7 +72,7 @@ def build_player_totals(tournamentData, teamData):
 
 def build_weekly_results(tournamentData, teamData, status='start'):
     df = teamData[teamData.status == status]
-    tournaments = dglib.get_tournaments(year=2025)
+    tournaments = dglib.get_tournaments(year=2026)
     weeklyDf = df[['week', 'coach', 'points']].groupby(by=['week', 'coach'], as_index=False).sum()
     weeklyDf = weeklyDf.pivot(index="week", columns="coach", values="points")
 
@@ -140,7 +140,7 @@ def build_standings(numWeeks, tournamentData, teamData, opponents):
         )
     return standings
 
-def build_template_variables(year=2025):
+def build_template_variables(year=2026):
     coaches = ['Luc', 'Marina', 'Wyatt', 'Max']
     tournaments = dglib.get_tournaments(year=year)
     numWeeks = sum([isinstance(t.url, str) for _, t in tournaments.iterrows()])
