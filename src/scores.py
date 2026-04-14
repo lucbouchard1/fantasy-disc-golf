@@ -51,7 +51,12 @@ table = {
     50:	5,
 }
 
-def get_points(place):
+def get_mpo_points(place):
     if place in table:
         return table[place]
+    return 0
+
+def get_fpo_points(place):
+    if place in table:
+        return table[place] * 0.6
     return 0

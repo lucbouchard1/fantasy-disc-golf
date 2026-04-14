@@ -19,14 +19,8 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 SAMPLE_SPREADSHEET_ID = "1mFoRynABSL416epHZq7LQ12L6CHh6VixLPOQJrTW81M"
 
 
-def download_tournament_data(url, csv_file):
-  r = requests.get(url)
-  content = r.text
-
-  print("Downloading", url, "to", csv_file)
-
-  soup = BeautifulSoup(content, 'html.parser')
-  table = soup.find(id="tournament-stats-0")
+def parse_pdga_results_to_df(soup, table_id):
+  table = soup.find(id=table_id)
 
   result = []
   for row in table.tbody.contents:
@@ -49,8 +43,20 @@ def download_tournament_data(url, csv_file):
 
       result.append(result_row)
 
-  df = pd.DataFrame(result)
-  df.to_csv(csv_file, header=False, index=False)
+  return pd.DataFrame(result)
+
+def download_tournament_data(url, mpo_file, fpo_file):
+  r = requests.get(url)
+  content = r.text
+
+  print("Downloading", url, "to", mpo_file, "and", fpo_file)
+
+  soup = BeautifulSoup(content, 'html.parser')
+  mpo_df = parse_pdga_results_to_df(soup, "tournament-stats-0")
+  fpo_df = parse_pdga_results_to_df(soup, "tournament-stats-1")
+
+  mpo_df.to_csv(mpo_file, header=False, index=False)
+  fpo_df.to_csv(fpo_file, header=False, index=False)
 
 def make_opponents(schedule, coaches):
   opponents = []
@@ -191,19 +197,21 @@ def get_tournament_data(year=2024):
 
     data = []
     for _, t in tournaments.iterrows():
-        if not isinstance(t.url, str):
-          continue
-        d = pd.read_csv(folder + t.file, header=None)
-        d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
-        d.columns=['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
-        d['type'] = t.type
-        d['week'] = t.week
-        d['tournament'] = t.tournament_name
-        data.append(d)
+        for division in ['mpo', 'fpo']:
+          if not isinstance(t.url, str):
+            continue
+          d = pd.read_csv(folder + f'/{division}/' + t.file, header=None)
+          d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
+          d.columns=['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
+          d['type'] = t.type
+          d['week'] = t.week
+          d['tournament'] = t.tournament_name
+          d['division'] = division
+          d['points'] = d['place'].apply(scores.get_mpo_points if division == 'mpo' else scores.get_fpo_points)
+          data.append(d)
 
     data = pd.concat(data)
 
-    data['points'] = data['place'].apply(scores.get_points)
     data['cash'] = data['prize'].str[1:].str.replace(',', '').astype(float).fillna(0)
     return data
 
@@ -227,16 +235,30 @@ def get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=False):
         for w in range(numWeeks):
             row = raw.iloc[w]
             for p in range(4):
-                curr = row['Start ' + str(p+1)]
+                curr = row['MPO Start ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'start', opponents[w][coach]))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'mpo_start', opponents[w][coach]))
                 else:
                     d.append(None)
 
-            for p in range(3):
-                curr = row['Bench ' + str(p+1)]
+            for p in range(2):
+                curr = row['FPO Start ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'bench', opponents[w][coach]))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'fpo_start', opponents[w][coach]))
+                else:
+                    d.append(None)
+
+            for p in range(2):
+                curr = row['MPO Bench ' + str(p+1)]
+                if isinstance(curr, str):
+                    d.append((row.Week, curr, name_to_pdga(curr), 'mpo_bench', opponents[w][coach]))
+                else:
+                    d.append(None)
+
+            for p in range(2):
+                curr = row['FPO Bench ' + str(p+1)]
+                if isinstance(curr, str):
+                    d.append((row.Week, curr, name_to_pdga(curr), 'fpo_bench', opponents[w][coach]))
                 else:
                     d.append(None)
 
@@ -265,4 +287,6 @@ if __name__ == "__main__":
   for _, t in tournaments.iterrows():
     if not isinstance(t.url, str):
       continue
-    download_tournament_data(t['url'], 'data/' + str(year) + '/' + t['file'])
+    download_tournament_data(t['url'],
+                             mpo_file='data/' + str(year) + '/mpo/' + t['file'],
+                             fpo_file='data/' + str(year) + '/fpo/' + t['file'])
