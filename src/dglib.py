@@ -254,21 +254,21 @@ def get_team_data(tournamentData, numWeeks, coaches, include_nonplaying=False):
             for p in range(6):
                 curr = row['Start ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'start', opponents[w][coach]))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'start', opponents[w][coach], 'mpo' if p < 4 else 'fpo'))
                 else:
                     d.append(None)
 
             for p in range(4):
                 curr = row['Bench ' + str(p+1)]
                 if isinstance(curr, str):
-                    d.append((row.Week, curr, name_to_pdga(curr), 'bench', opponents[w][coach]))
+                    d.append((row.Week, curr, name_to_pdga(curr), 'bench', opponents[w][coach], None))
                 else:
                     d.append(None)
 
             if (not pd.isnull(row['Injury Reserve'])):
-                d.append((row.Week, row['Injury Reserve'], name_to_pdga(row['Injury Reserve']), 'injury', opponents[w][coach]))
+                d.append((row.Week, row['Injury Reserve'], name_to_pdga(row['Injury Reserve']), 'injury', opponents[w][coach], None))
 
-        d = pd.DataFrame(d, columns=['week', 'entered_name', 'pdga#', 'status', 'opponent'])
+        d = pd.DataFrame(d, columns=['week', 'entered_name', 'pdga#', 'status', 'opponent', 'entered_division'])
         d['coach'] = coach
         data.append(d)
 

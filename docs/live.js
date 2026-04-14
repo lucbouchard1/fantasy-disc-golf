@@ -53,7 +53,7 @@ scores = {
 }
 
 function getPoints(place, division) {
-    const mult = diviosn == "fpo" ? 0.6 : 1
+    const mult = division == "fpo" ? 0.6 : 1
     if (place in scores) {
         return scores[place] * mult;
     }
