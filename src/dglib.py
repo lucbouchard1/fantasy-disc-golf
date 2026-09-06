@@ -34,6 +34,7 @@ def parse_pdga_results_to_df(soup, table_id):
       for col in row.contents:
           if (col.name != "td" or \
                 'round-rating' in col['class'] or \
+                'pool' in col['class'] or \
                 'points' in col['class'] or \
                 len(col.contents) == 0):
               continue
@@ -48,18 +49,25 @@ def parse_pdga_results_to_df(soup, table_id):
 
   return pd.DataFrame(result)
 
-def download_tournament_data(url, mpo_file, fpo_file):
+def download_tournament_data(url, type, mpo_file, fpo_file):
   r = requests.get(url)
   content = r.text
 
   print("Downloading", url, "to", mpo_file, "and", fpo_file)
 
   soup = BeautifulSoup(content, 'html.parser')
-  mpo_df = parse_pdga_results_to_df(soup, "tournament-stats-0")
-  fpo_df = parse_pdga_results_to_df(soup, "tournament-stats-1")
 
-  mpo_df.to_csv(mpo_file, header=False, index=False)
-  fpo_df.to_csv(fpo_file, header=False, index=False)
+  if type == 'fes':
+    fpo_df = parse_pdga_results_to_df(soup, "tournament-stats-0")
+
+    pd.DataFrame().to_csv(mpo_file, header=False, index=False)
+    fpo_df.to_csv(fpo_file, header=False, index=False)
+  else:
+    mpo_df = parse_pdga_results_to_df(soup, "tournament-stats-0")
+    fpo_df = parse_pdga_results_to_df(soup, "tournament-stats-1")
+
+    mpo_df.to_csv(mpo_file, header=False, index=False)
+    fpo_df.to_csv(fpo_file, header=False, index=False)
 
 def make_opponents(schedule, coaches):
   opponents = []
@@ -100,7 +108,7 @@ def get_schedule(coaches):
   try:
     service = build("sheets", "v4", credentials=creds)
 
-    data_range = "Schedule!A1:F21"
+    data_range = "Schedule!A1:F27"
     # Call the Sheets API
     sheet = service.spreadsheets()
     result = (
@@ -114,7 +122,7 @@ def get_schedule(coaches):
        return
 
     schedule = []
-    for i in range(1, 18):
+    for i in range(1, 24):
       r = values[i]
       schedule.append([
          (r[2], r[3]),
@@ -216,9 +224,13 @@ def get_tournament_data(year=2024):
         for division in ['mpo', 'fpo']:
           if not isinstance(t.url, str):
             continue
-          d = pd.read_csv(folder + f'/{division}/' + t.file, header=None)
-          d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
-          d.columns=['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
+          cols = ['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
+          try:
+              d = pd.read_csv(folder + f'/{division}/' + t.file, header=None)
+              d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
+              d.columns = cols
+          except pd.errors.EmptyDataError:
+              d = pd.DataFrame(columns=cols)
           d['type'] = t.type
           d['week'] = t.week
           d['tournament'] = t.tournament_name
@@ -290,6 +302,6 @@ if __name__ == "__main__":
   for _, t in tournaments.iterrows():
     if not isinstance(t.url, str):
       continue
-    download_tournament_data(t['url'],
+    download_tournament_data(t['url'], t['type'],
                              mpo_file='data/' + str(year) + '/mpo/' + t['file'],
                              fpo_file='data/' + str(year) + '/fpo/' + t['file'])
