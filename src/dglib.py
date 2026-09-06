@@ -224,13 +224,12 @@ def get_tournament_data(year=2024):
         for division in ['mpo', 'fpo']:
           if not isinstance(t.url, str):
             continue
-          cols = ['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
           try:
               d = pd.read_csv(folder + f'/{division}/' + t.file, header=None)
-              d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
-              d.columns = cols
           except pd.errors.EmptyDataError:
-              d = pd.DataFrame(columns=cols)
+              continue
+          d = pd.concat([d.iloc[:,0:5], d.iloc[:,-2:]], axis=1)
+          d.columns = ['place', 'name', 'pdga#', 'rating', 'par', 'total', 'prize']
           d['type'] = t.type
           d['week'] = t.week
           d['tournament'] = t.tournament_name
